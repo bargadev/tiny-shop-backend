@@ -20,7 +20,14 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/database/data-source.ts",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/database/data-source.ts",
-    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/data-source.ts"
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/data-source.ts",
+    "docker:up": "docker-compose up postgres -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs postgres",
+    "docker:status": "docker-compose ps",
+    "docker:restart": "docker-compose restart postgres",
+    "dev:setup": "npm run docker:up && npm run migration:run",
+    "dev:clean": "npm run docker:down"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
