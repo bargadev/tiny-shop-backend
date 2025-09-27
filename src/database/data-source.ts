@@ -7,8 +7,8 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_NAME || 'tiny_shop',
-  entities: [],
-  migrations: [],
+  entities: ['src/entities/*.ts'],
+  migrations: ['src/database/migrations/*.ts'],
   synchronize: false, // Desabilitar sincronização automática
   logging: process.env.NODE_ENV === 'development',
 });

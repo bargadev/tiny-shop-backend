@@ -14,12 +14,8 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Copy scripts
-COPY scripts/simple-start.sh ./scripts/
-RUN chmod +x ./scripts/simple-start.sh
-
 # Expose port
 EXPOSE 3000
 
-# Use simple start script (migrations via init.sql)
-CMD ["./scripts/simple-start.sh"]
+# Start application (migrations already executed)
+CMD ["npm", "run", "start:dev"]

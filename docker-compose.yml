@@ -75,6 +75,34 @@ services:
     profiles:
       - dev
 
+  # Complete service with migrations
+  app-complete:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: tiny-shop-app-complete
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: tiny_shop
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - tiny-shop-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npm run migration:run && npm run start:dev"
+    profiles:
+      - complete
+
 volumes:
   postgres_data:
 
