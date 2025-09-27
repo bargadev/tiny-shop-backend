@@ -1,3 +1,0 @@
--- Initialize database for Tiny Shop
--- Database is created by docker-compose environment variables
--- Migrations will be handled by TypeORM
