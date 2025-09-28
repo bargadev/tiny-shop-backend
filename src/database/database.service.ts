@@ -1,14 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { AppDataSource } from './data-source';
 
 @Injectable()
 export class DatabaseService {
-  private dataSource: DataSource;
-
-  constructor() {
-    this.dataSource = AppDataSource;
-  }
+  constructor(private readonly dataSource: DataSource) {}
 
   async getDataSource(): Promise<DataSource> {
     if (!this.dataSource.isInitialized) {

@@ -16,14 +16,12 @@ export class UsersService {
   constructor(private databaseService: DatabaseService) {}
 
   async findAll(): Promise<User[]> {
-    return this.databaseService.query(
-      'SELECT * FROM users ORDER BY created_at DESC',
-    );
+    return this.databaseService.query('SELECT * FROM "user"');
   }
 
   async findOne(id: number): Promise<User> {
     const users = await this.databaseService.query(
-      'SELECT * FROM users WHERE id = $1',
+      'SELECT * FROM "user" WHERE id = $1',
       [id],
     );
 
@@ -36,7 +34,7 @@ export class UsersService {
 
   async findByUserId(userId: string): Promise<User | null> {
     const users = await this.databaseService.query(
-      'SELECT * FROM users WHERE user_id = $1',
+      'SELECT * FROM "user" WHERE user_id = $1',
       [userId],
     );
 
@@ -50,15 +48,15 @@ export class UsersService {
   }): Promise<User> {
     const newUserUlid = this.generateUlid();
 
-    await this.databaseService.query(
-      'INSERT INTO users (user_id, fullname, email, password) VALUES ($1, $2, $3, $4)',
-      [
-        newUserUlid,
-        createUserDto.fullname,
-        createUserDto.email,
-        createUserDto.password,
-      ],
-    );
+    const insertUserQuery =
+      'INSERT INTO "user" (user_id, fullname, email, password) VALUES ($1, $2, $3, $4)';
+
+    await this.databaseService.query(insertUserQuery, [
+      newUserUlid,
+      createUserDto.fullname,
+      createUserDto.email,
+      createUserDto.password,
+    ]);
 
     return this.findByUserId(newUserUlid);
   }
@@ -96,16 +94,17 @@ export class UsersService {
     values.push(id);
 
     await this.databaseService.query(
-      `UPDATE users SET ${updates.join(', ')} WHERE id = $${paramCount}`,
+      `UPDATE "user" SET ${updates.join(', ')} WHERE id = $${paramCount}`,
       values,
     );
 
     return this.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<User> {
     const user = await this.findOne(id);
-    await this.databaseService.query('DELETE FROM users WHERE id = $1', [id]);
+    await this.databaseService.query('DELETE FROM "user" WHERE id = $1', [id]);
+    return user;
   }
 
   private generateUlid(): string {

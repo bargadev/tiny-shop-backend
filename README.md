@@ -19,22 +19,26 @@ Backend API para o sistema Tiny Shop, construído com NestJS, PostgreSQL e Docke
 ## 🛠️ Instalação e Configuração
 
 ### 1. Clone o repositório
+
 ```bash
 git clone <repository-url>
 cd tiny-shop-backend
 ```
 
 ### 2. Instale as dependências
+
 ```bash
 npm install
 ```
 
 ### 3. Configure as variáveis de ambiente
+
 ```bash
 cp env.example .env
 ```
 
 Edite o arquivo `.env` com suas configurações:
+
 ```env
 DB_HOST=localhost
 DB_PORT=5432
@@ -48,6 +52,7 @@ PORT=3000
 ## 🐳 Executando com Docker
 
 ### Desenvolvimento
+
 ```bash
 # Inicia apenas o banco de dados
 docker-compose up postgres
@@ -57,12 +62,14 @@ docker-compose --profile dev up app-dev
 ```
 
 ### Produção
+
 ```bash
 # Inicia todos os serviços
 docker-compose up -d
 ```
 
 ### Parar os serviços
+
 ```bash
 docker-compose down
 ```
@@ -70,11 +77,13 @@ docker-compose down
 ## 🚀 Executando Localmente
 
 ### 1. Inicie o banco de dados
+
 ```bash
 docker-compose up postgres -d
 ```
 
 ### 2. Execute a aplicação
+
 ```bash
 # Desenvolvimento
 npm run start:dev
@@ -87,10 +96,12 @@ npm run start:prod
 ## 📚 Endpoints da API
 
 ### Health Check
+
 - `GET /` - Página inicial
 - `GET /health` - Status da aplicação
 
 ### Users
+
 - `GET /users` - Lista todos os usuários
 - `GET /users/:id` - Busca usuário por ID
 - `POST /users` - Cria novo usuário
@@ -98,6 +109,7 @@ npm run start:prod
 - `DELETE /users/:id` - Remove usuário
 
 ### Exemplo de criação de usuário
+
 ```bash
 curl -X POST http://localhost:3000/users \
   -H "Content-Type: application/json" \
@@ -107,19 +119,62 @@ curl -X POST http://localhost:3000/users \
 ## 🗄️ Banco de Dados
 
 O banco de dados PostgreSQL é configurado automaticamente com:
+
 - Database: `tiny_shop`
 - Usuário: `postgres`
 - Senha: `postgres`
 - Porta: `5432`
 
+### Acessando o banco de dados via Docker
+
+```bash
+# Conectar ao container do PostgreSQL
+docker exec -it tiny-shop-db psql -U postgres -d tiny_shop
+
+# Ou usando docker-compose
+docker-compose exec postgres psql -U postgres -d tiny_shop
+```
+
+### Comandos úteis do PostgreSQL
+
+```sql
+-- Listar todas as tabelas
+\dt
+
+-- Descrever estrutura de uma tabela
+\d users
+
+-- Listar todas as bases de dados
+\l
+
+-- Sair do psql
+\q
+```
+
+### Executando migrações
+
+```bash
+# Executar migrações
+npm run migration:run
+
+# Reverter última migração
+npm run migration:revert
+
+# Criar nova migração
+npm run migration:create --name=NomeDaMigracao
+```
+
 ### Estrutura da tabela users
+
 ```sql
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id VARCHAR(26) UNIQUE NOT NULL,
+    fullname VARCHAR(255) NOT NULL CHECK (LENGTH(fullname) >= 2),
+    email VARCHAR(255) UNIQUE NOT NULL CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    password VARCHAR(255) NOT NULL CHECK (LENGTH(password) >= 8),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -152,12 +207,14 @@ npm run test:cov
 ## 🔧 Configuração do Docker
 
 ### Dockerfile
+
 - Multi-stage build para otimização
 - Usuário não-root para segurança
 - Health check configurado
 - Cache de dependências
 
 ### Docker Compose
+
 - Serviço PostgreSQL
 - Serviço da aplicação
 - Rede isolada
