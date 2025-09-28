@@ -19,4 +19,4 @@ EXPOSE 3000
 
 # Comando para iniciar em modo desenvolvimento
 # CMD ["npm", "run", "start:dev"]
-CMD ["sh", "-c", "npm run migration:run && npm run start:dev"]
+CMD ["sh", "-c", "scripts/init-db.sh && npm run start:dev"]
