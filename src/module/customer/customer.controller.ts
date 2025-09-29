@@ -7,20 +7,20 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Customer, CustomersService } from './customers.service';
+import { Customer, CustomerService } from './customer.service';
 
-@Controller('customer')
-export class CustomersController {
-  constructor(private readonly customersService: CustomersService) {}
+@Controller('customers')
+export class CustomerController {
+  constructor(private readonly customerService: CustomerService) {}
 
   @Get()
   async findAll(): Promise<Customer[]> {
-    return this.customersService.findAll();
+    return this.customerService.findAll();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Customer> {
-    return this.customersService.findOne(+id);
+    return this.customerService.findOne(+id);
   }
 
   @Post()
@@ -34,7 +34,7 @@ export class CustomersController {
       date_of_birth?: Date;
     },
   ): Promise<Customer> {
-    return this.customersService.create(createCustomerDto);
+    return this.customerService.create(createCustomerDto);
   }
 
   @Put(':id')
@@ -49,11 +49,11 @@ export class CustomersController {
       date_of_birth?: Date;
     },
   ): Promise<Customer> {
-    return this.customersService.update(+id, updateCustomerDto);
+    return this.customerService.update(+id, updateCustomerDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<Customer> {
-    return this.customersService.remove(+id);
+    return this.customerService.remove(+id);
   }
 }

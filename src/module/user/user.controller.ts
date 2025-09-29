@@ -7,20 +7,20 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { User, UsersService } from './users.service';
+import { User, UserService } from './user.service';
 
 @Controller('users')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   async findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+    return this.userService.findAll();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<User> {
-    return this.usersService.findOne(+id);
+    return this.userService.findOne(+id);
   }
 
   @Post()
@@ -32,7 +32,7 @@ export class UsersController {
       password: string;
     },
   ): Promise<User> {
-    return this.usersService.create(createUserDto);
+    return this.userService.create(createUserDto);
   }
 
   @Put(':id')
@@ -41,11 +41,11 @@ export class UsersController {
     @Body()
     updateUserDto: { fullname?: string; email?: string; password?: string },
   ): Promise<User> {
-    return this.usersService.update(+id, updateUserDto);
+    return this.userService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<User> {
-    return this.usersService.remove(+id);
+    return this.userService.remove(+id);
   }
 }
