@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
+import { DatabaseService } from '../../database/database.service';
 
 export interface User {
   id: number;
@@ -12,7 +12,7 @@ export interface User {
 }
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private databaseService: DatabaseService) {}
 
   async findAll(): Promise<User[]> {

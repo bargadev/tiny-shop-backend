@@ -3,9 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CustomersModule } from './customers/customers.module';
 import { DatabaseModule } from './database/database.module';
-import { UsersModule } from './users/users.module';
+import { CustomerModule } from './module/customer/customer.module';
+import { UserModule } from './module/user/user.module';
 
 @Module({
   imports: [
@@ -23,8 +23,8 @@ import { UsersModule } from './users/users.module';
       logging: process.env.NODE_ENV === 'development',
     }),
     DatabaseModule,
-    UsersModule,
-    CustomersModule,
+    UserModule,
+    CustomerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
