@@ -18,5 +18,6 @@ echo "Running seeds..."
 PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seeds/01-initial-users.sql
 PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seeds/02-initial-customers.sql
 PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seeds/03-initial-addresses.sql
+PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seeds/04-initial-items.sql
 
 echo "Database initialization complete!"

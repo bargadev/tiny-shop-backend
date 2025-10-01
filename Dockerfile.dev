@@ -14,9 +14,12 @@ RUN npm ci
 # Copiar código fonte
 COPY . .
 
+# Dar permissão de execução ao script
+RUN chmod +x script/init-db.sh
+
 # Expor a porta
 EXPOSE 3000
 
 # Comando para iniciar em modo desenvolvimento
 # CMD ["npm", "run", "start:dev"]
-CMD ["sh", "-c", "script/init-db.sh && npm run start:dev"]
+CMD ["sh", "-c", "sh ./script/init-db.sh && npm run start:dev"]

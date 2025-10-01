@@ -35,7 +35,9 @@ curl http://localhost:3000/users
 
 ## Dados inseridos
 
-O arquivo `01-initial-users.sql` insere 5 usuários de exemplo:
+### Usuários (`01-initial-users.sql`)
+
+O arquivo insere 5 usuários de exemplo:
 
 | Nome            | Email                     | Senha    |
 | --------------- | ------------------------- | -------- |
@@ -46,6 +48,18 @@ O arquivo `01-initial-users.sql` insere 5 usuários de exemplo:
 | Carlos Ferreira | carlos.ferreira@email.com | 12345678 |
 
 **Nota**: As senhas estão hasheadas com bcrypt para segurança.
+
+### Clientes (`02-initial-customers.sql`)
+
+O arquivo insere 5 clientes de exemplo com dados pessoais e de contato.
+
+### Endereços (`03-initial-addresses.sql`)
+
+O arquivo insere endereços de exemplo associados aos clientes.
+
+### Items (`04-initial-items.sql`)
+
+O arquivo insere 8 items de exemplo incluindo notebooks, periféricos, monitores e acessórios para informática.
 
 ## 🔄 Resetar o banco (se necessário)
 

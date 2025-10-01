@@ -17,7 +17,7 @@ import {
   UpdateAddressDto,
 } from './address.service';
 
-@Controller('addresses')
+@Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
