@@ -24,7 +24,7 @@ Se precisar executar manualmente:
 
 ```bash
 # Executar o script de inicialização completo
-docker exec tiny-shop-backend-dev sh scripts/init-db.sh
+docker exec tiny-shop-backend-dev sh script/init-db.sh
 
 # Ou executar apenas os seeds
 docker exec tiny-shop-backend-dev sh -c "PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seeds/01-initial-users.sql"

@@ -16,5 +16,7 @@ npm run migration:run
 # Run seeds
 echo "Running seeds..."
 PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seeds/01-initial-users.sql
+PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seeds/02-initial-customers.sql
+PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seeds/03-initial-addresses.sql
 
 echo "Database initialization complete!"
