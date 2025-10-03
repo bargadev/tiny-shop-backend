@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Item, ItemService } from './item.service';
 
@@ -14,7 +15,10 @@ export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
   @Get()
-  async findAll(): Promise<Item[]> {
+  async findAll(@Query('name') name?: string): Promise<Item[]> {
+    if (name) {
+      return this.itemService.findByName(name);
+    }
     return this.itemService.findAll();
   }
 

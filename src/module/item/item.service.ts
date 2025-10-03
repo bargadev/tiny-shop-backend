@@ -60,6 +60,13 @@ export class ItemService {
     );
   }
 
+  async findByName(name: string): Promise<Item[]> {
+    return this.databaseService.query(
+      'SELECT * FROM item WHERE name ILIKE $1',
+      [`%${name}%`],
+    );
+  }
+
   async create(createItemDto: {
     name: string;
     description?: string;
