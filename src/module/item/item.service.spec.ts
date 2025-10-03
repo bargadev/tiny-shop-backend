@@ -127,6 +127,21 @@ describe('ItemService', () => {
     );
   });
 
+  it('should call database query for findByName', async () => {
+    databaseService.query.mockResolvedValue([mockItem]);
+    await service.findByName('Notebook');
+    expect(databaseService.query).toHaveBeenCalledWith(
+      'SELECT * FROM item WHERE name ILIKE $1',
+      ['%Notebook%'],
+    );
+  });
+
+  it('should return empty array when findByName finds no items', async () => {
+    databaseService.query.mockResolvedValue([]);
+    const result = await service.findByName('NonExistent');
+    expect(result).toEqual([]);
+  });
+
   it('should handle update with sku field', async () => {
     databaseService.query.mockResolvedValueOnce([mockItem]);
     databaseService.query.mockResolvedValueOnce(undefined);
