@@ -1,60 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../../database/database.service';
+import { Address, CreateAddressDto, UpdateAddressDto } from './address.dto';
 
-export interface Address {
-  id: number;
-  customer_id: string;
-  street: string;
-  number: string;
-  complement?: string;
-  neighborhood: string;
-  city: string;
-  state: string;
-  postal_code: string;
-  country: string;
-  is_primary: boolean;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface CreateAddressDto {
-  customerId: string;
-  street: string;
-  number: string;
-  complement?: string;
-  neighborhood: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country?: string;
-  isPrimary?: boolean;
-}
-
-export interface UpdateAddressDto {
-  street?: string;
-  number?: string;
-  complement?: string;
-  neighborhood?: string;
-  city?: string;
-  state?: string;
-  postalCode?: string;
-  country?: string;
-  isPrimary?: boolean;
-}
-
+const TABLE = 'address';
 @Injectable()
 export class AddressService {
   constructor(private databaseService: DatabaseService) {}
 
   async findAll(): Promise<Address[]> {
     return this.databaseService.query(
-      'SELECT * FROM addresses ORDER BY created_at DESC',
+      `SELECT * FROM ${TABLE} ORDER BY created_at DESC`,
     );
   }
 
   async findOne(id: number): Promise<Address> {
     const addresses = await this.databaseService.query(
-      'SELECT * FROM addresses WHERE id = $1',
+      `SELECT * FROM ${TABLE} WHERE id = $1`,
       [id],
     );
 
@@ -66,9 +27,8 @@ export class AddressService {
   }
 
   async findByCustomerId(customerId: string): Promise<Address[]> {
-    // First verify customer exists
     const customers = await this.databaseService.query(
-      'SELECT customer_id FROM customer WHERE customer_id = $1',
+      `SELECT customer_id FROM ${TABLE} WHERE customer_id = $1`,
       [customerId],
     );
 
@@ -77,15 +37,14 @@ export class AddressService {
     }
 
     return this.databaseService.query(
-      'SELECT * FROM addresses WHERE customer_id = $1 ORDER BY is_primary DESC, created_at ASC',
+      `SELECT * FROM ${TABLE} WHERE customer_id = $1 ORDER BY is_primary DESC, created_at ASC`,
       [customerId],
     );
   }
 
   async findPrimaryByCustomerId(customerId: string): Promise<Address | null> {
-    // First verify customer exists
     const customers = await this.databaseService.query(
-      'SELECT customer_id FROM customer WHERE customer_id = $1',
+      `SELECT customer_id FROM ${TABLE} WHERE customer_id = $1`,
       [customerId],
     );
 
@@ -94,7 +53,7 @@ export class AddressService {
     }
 
     const addresses = await this.databaseService.query(
-      'SELECT * FROM addresses WHERE customer_id = $1 AND is_primary = TRUE',
+      `SELECT * FROM ${TABLE} WHERE customer_id = $1 AND is_primary = TRUE`,
       [customerId],
     );
 
@@ -102,9 +61,8 @@ export class AddressService {
   }
 
   async create(createAddressDto: CreateAddressDto): Promise<Address> {
-    // Verify customer exists
     const customers = await this.databaseService.query(
-      'SELECT customer_id FROM customer WHERE customer_id = $1',
+      `SELECT customer_id FROM ${TABLE} WHERE customer_id = $1`,
       [createAddressDto.customerId],
     );
 
@@ -117,13 +75,13 @@ export class AddressService {
     // If this address is marked as primary, unset other primary addresses
     if (createAddressDto.isPrimary) {
       await this.databaseService.query(
-        'UPDATE addresses SET is_primary = FALSE WHERE customer_id = $1 AND is_primary = TRUE',
+        `UPDATE ${TABLE} SET is_primary = FALSE WHERE customer_id = $1 AND is_primary = TRUE`,
         [createAddressDto.customerId],
       );
     }
 
     const insertAddressQuery = `
-      INSERT INTO addresses (
+      INSERT INTO ${TABLE} (
         customer_id, street, number, complement, neighborhood, city, state, postal_code, country, is_primary
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *
@@ -151,15 +109,13 @@ export class AddressService {
   ): Promise<Address> {
     const address = await this.findOne(id);
 
-    // If setting this address as primary, unset other primary addresses for this customer
     if (updateAddressDto.isPrimary === true) {
       await this.databaseService.query(
-        'UPDATE addresses SET is_primary = FALSE WHERE customer_id = $1 AND is_primary = TRUE',
-        [address.customer_id],
+        `UPDATE ${TABLE} SET is_primary = FALSE WHERE customer_id = $1 AND is_primary = TRUE`,
+        [address.id],
       );
     }
 
-    // Build dynamic update query
     const updates = [];
     const values = [];
     let paramCount = 1;
@@ -217,7 +173,7 @@ export class AddressService {
     values.push(id);
 
     await this.databaseService.query(
-      `UPDATE addresses SET ${updates.join(', ')} WHERE id = $${paramCount}`,
+      `UPDATE ${TABLE} SET ${updates.join(', ')} WHERE id = $${paramCount}`,
       values,
     );
 
@@ -226,7 +182,7 @@ export class AddressService {
 
   async remove(id: number): Promise<Address> {
     const address = await this.findOne(id);
-    await this.databaseService.query('DELETE FROM addresses WHERE id = $1', [
+    await this.databaseService.query(`DELETE FROM ${TABLE} WHERE id = $1`, [
       id,
     ]);
     return address;
@@ -235,15 +191,13 @@ export class AddressService {
   async setAsPrimary(id: number): Promise<Address> {
     const address = await this.findOne(id);
 
-    // Unset other primary addresses for this customer
     await this.databaseService.query(
-      'UPDATE addresses SET is_primary = FALSE WHERE customer_id = $1 AND is_primary = TRUE',
+      `UPDATE ${TABLE} SET is_primary = FALSE WHERE customer_id = $1 AND is_primary = TRUE`,
       [address.customer_id],
     );
 
-    // Set this address as primary
     await this.databaseService.query(
-      'UPDATE addresses SET is_primary = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1',
+      `UPDATE ${TABLE} SET is_primary = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1`,
       [id],
     );
 

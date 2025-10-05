@@ -7,7 +7,7 @@ export const MigrationDataSource = new DataSource({
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_NAME || 'tiny_shop',
-  migrations: ['src/database/migrations/*.ts'],
+  migrations: ['src/database/migration/*.ts'],
   synchronize: false,
   logging: process.env.NODE_ENV === 'development',
 });
