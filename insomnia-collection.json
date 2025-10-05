@@ -6,11 +6,11 @@
   "resources": [
     {
       "_id": "req_health",
-      "parentId": "fld_root",
+      "parentId": "wrk_tiny_shop",
       "modified": 1706572800000,
       "created": 1706572800000,
       "url": "{{ _.base_url }}/health",
-      "name": "Health Check",
+      "name": "health check",
       "description": "Verifica o status da aplicação",
       "method": "GET",
       "body": {},
@@ -29,11 +29,11 @@
     },
     {
       "_id": "req_root",
-      "parentId": "fld_root",
+      "parentId": "wrk_tiny_shop",
       "modified": 1706572800000,
       "created": 1706572800000,
       "url": "{{ _.base_url }}/",
-      "name": "Root",
+      "name": "root",
       "description": "Página inicial da API",
       "method": "GET",
       "body": {},
@@ -51,13 +51,13 @@
       "_type": "request"
     },
     {
-      "_id": "req_users_get_all",
-      "parentId": "fld_users",
+      "_id": "req_addresses_get_all",
+      "parentId": "fld_addresses",
       "modified": 1706572800000,
       "created": 1706572800000,
-      "url": "{{ _.base_url }}/users",
-      "name": "Get All Users",
-      "description": "Lista todos os usuários",
+      "url": "{{ _.base_url }}/address",
+      "name": "get all addresses",
+      "description": "Lista todos os endereços",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -74,13 +74,13 @@
       "_type": "request"
     },
     {
-      "_id": "req_users_get_one",
-      "parentId": "fld_users",
+      "_id": "req_addresses_get_one",
+      "parentId": "fld_addresses",
       "modified": 1706572800000,
       "created": 1706572800000,
-      "url": "{{ _.base_url }}/users/{{ _.user_id }}",
-      "name": "Get User by ID",
-      "description": "Busca um usuário específico por ID",
+      "url": "{{ _.base_url }}/address/{{ _.address_id }}",
+      "name": "get address by id",
+      "description": "Busca um endereço específico por ID",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -97,25 +97,17 @@
       "_type": "request"
     },
     {
-      "_id": "req_users_create",
-      "parentId": "fld_users",
+      "_id": "req_addresses_get_by_customer",
+      "parentId": "fld_addresses",
       "modified": 1706572800000,
       "created": 1706572800000,
-      "url": "{{ _.base_url }}/users",
-      "name": "Create User",
-      "description": "Cria um novo usuário",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"fullname\": \"João Silva\",\n  \"email\": \"joao@example.com\",\n  \"password\": \"senha123\"\n}"
-      },
+      "url": "{{ _.base_url }}/address/customer/{{ _.customer_id }}",
+      "name": "get addresses by customer",
+      "description": "Busca endereços de um cliente específico",
+      "method": "GET",
+      "body": {},
       "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
+      "headers": [],
       "authentication": {},
       "metaSortKey": -1706572800002,
       "isPrivate": false,
@@ -128,25 +120,17 @@
       "_type": "request"
     },
     {
-      "_id": "req_users_update",
-      "parentId": "fld_users",
+      "_id": "req_addresses_get_primary",
+      "parentId": "fld_addresses",
       "modified": 1706572800000,
       "created": 1706572800000,
-      "url": "{{ _.base_url }}/users/{{ _.user_id }}",
-      "name": "Update User",
-      "description": "Atualiza um usuário existente",
-      "method": "PUT",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"fullname\": \"João Silva Atualizado\",\n  \"email\": \"joao.novo@example.com\"\n}"
-      },
+      "url": "{{ _.base_url }}/address/customer/{{ _.customer_id }}/primary",
+      "name": "get primary address",
+      "description": "Busca o endereço primário de um cliente",
+      "method": "GET",
+      "body": {},
       "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
+      "headers": [],
       "authentication": {},
       "metaSortKey": -1706572800003,
       "isPrivate": false,
@@ -159,19 +143,104 @@
       "_type": "request"
     },
     {
-      "_id": "req_users_delete",
-      "parentId": "fld_users",
+      "_id": "req_addresses_create",
+      "parentId": "fld_addresses",
       "modified": 1706572800000,
       "created": 1706572800000,
-      "url": "{{ _.base_url }}/users/{{ _.user_id }}",
-      "name": "Delete User",
-      "description": "Remove um usuário",
+      "url": "{{ _.base_url }}/address",
+      "name": "create address",
+      "description": "Cria um novo endereço",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"customerId\": \"{{ _.customer_id }}\",\n  \"street\": \"Rua das Flores\",\n  \"number\": \"123\",\n  \"complement\": \"Apto 45\",\n  \"neighborhood\": \"Centro\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"postalCode\": \"01234-567\",\n  \"country\": \"Brasil\",\n  \"isPrimary\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1706572800004,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_addresses_update",
+      "parentId": "fld_addresses",
+      "modified": 1706572800000,
+      "created": 1706572800000,
+      "url": "{{ _.base_url }}/address/{{ _.address_id }}",
+      "name": "update address",
+      "description": "Atualiza um endereço existente",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"street\": \"Rua das Palmeiras\",\n  \"number\": \"456\",\n  \"neighborhood\": \"Vila Nova\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1706572800005,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_addresses_set_primary",
+      "parentId": "fld_addresses",
+      "modified": 1706572800000,
+      "created": 1706572800000,
+      "url": "{{ _.base_url }}/address/{{ _.address_id }}/set-primary",
+      "name": "set primary address",
+      "description": "Define um endereço como primário",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1706572800006,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_addresses_delete",
+      "parentId": "fld_addresses",
+      "modified": 1706572800000,
+      "created": 1706572800000,
+      "url": "{{ _.base_url }}/address/{{ _.address_id }}",
+      "name": "delete address",
+      "description": "Remove um endereço",
       "method": "DELETE",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -1706572800004,
+      "metaSortKey": -1706572800007,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
