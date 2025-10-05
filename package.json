@@ -18,22 +18,26 @@
     "test:coverage": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration:create": "typeorm-ts-node-commonjs migration:create src/database/migrations/$npm_config_name",
+    "migration:create": "typeorm-ts-node-commonjs migration:create src/database/migration/$npm_config_name",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/database/migration-data-source.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/migration-data-source.ts",
     "docker:dev:up": "docker-compose -f docker-compose.dev.yml up postgres backend",
-    "docker:dev:clean": "docker-compose -f docker-compose.dev.yml down -v --rmi all --remove-orphans && docker system prune -af"
+    "docker:dev:clean": "docker-compose -f docker-compose.dev.yml down -v --rmi all --remove-orphans && docker system prune -af",
+    "db:connect": "docker exec -it tiny-shop-postgres-dev psql -U postgres -d tiny_shop",
+    "db:seed": "docker exec tiny-shop-backend-dev sh sh-script/init-db.sh",
+    "db:update-address-ids": "docker exec tiny-shop-backend-dev npx ts-node src/script/update-address-ids.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.0",
-    "@nestjs/config": "^3.1.1",
-    "typeorm": "^0.3.17",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.17",
+    "ulid": "^3.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

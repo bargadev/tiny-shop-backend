@@ -24,10 +24,10 @@ Se precisar executar manualmente:
 
 ```bash
 # Executar o script de inicialização completo
-docker exec tiny-shop-backend-dev sh script/init-db.sh
+docker exec tiny-shop-backend-dev sh sh-script/init-db.sh
 
 # Ou executar apenas os seeds
-docker exec tiny-shop-backend-dev sh -c "PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seeds/01-initial-users.sql"
+docker exec tiny-shop-backend-dev sh -c "PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seed/01-init-user-table.sql"
 
 # Verificar se funcionou
 curl http://localhost:3000/users
@@ -35,7 +35,7 @@ curl http://localhost:3000/users
 
 ## Dados inseridos
 
-### Usuários (`01-initial-users.sql`)
+### Usuários (`01-init-user-table.sql`)
 
 O arquivo insere 5 usuários de exemplo:
 
@@ -49,15 +49,15 @@ O arquivo insere 5 usuários de exemplo:
 
 **Nota**: As senhas estão hasheadas com bcrypt para segurança.
 
-### Clientes (`02-initial-customers.sql`)
+### Clientes (`02-init-customer-table.sql`)
 
 O arquivo insere 5 clientes de exemplo com dados pessoais e de contato.
 
-### Endereços (`03-initial-addresses.sql`)
+### Endereços (`03-init-address-table.sql`)
 
 O arquivo insere endereços de exemplo associados aos clientes.
 
-### Items (`04-initial-items.sql`)
+### Items (`04-init-item-table.sql`)
 
 O arquivo insere 8 items de exemplo incluindo notebooks, periféricos, monitores e acessórios para informática.
 

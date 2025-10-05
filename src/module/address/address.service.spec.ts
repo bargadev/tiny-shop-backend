@@ -1,11 +1,11 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DatabaseService } from '../../database/database.service';
-import { Address, AddressService } from './address.service';
+import { Address } from './address.dto';
+import { AddressService } from './address.service';
 
 describe('AddressService', () => {
   let service: AddressService;
-  let databaseService: DatabaseService;
 
   const mockAddress: Address = {
     id: 1,
@@ -51,7 +51,6 @@ describe('AddressService', () => {
     }).compile();
 
     service = module.get<AddressService>(AddressService);
-    databaseService = module.get<DatabaseService>(DatabaseService);
   });
 
   it('should be defined', () => {
@@ -146,7 +145,7 @@ describe('AddressService', () => {
         .mockResolvedValueOnce({}) // update call
         .mockResolvedValueOnce([{ ...mockAddress, ...updateDto }]); // findOne after update
 
-      const result = await service.update(1, updateDto);
+      await service.update(1, updateDto);
       expect(mockDatabaseService.query).toHaveBeenCalledWith(
         'UPDATE addresses SET street = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
         ['Nova Rua', 1],

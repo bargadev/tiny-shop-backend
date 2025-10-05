@@ -1,7 +1,13 @@
--- Initial item data for development and testing
--- This file contains sample item data to populate the item table
+-- Initial item data for Tiny Shop Backend
+-- This file contains sample items for development and testing purposes
+-- 
+-- Note: These are standalone items that don't depend on other tables
+-- 
+-- To use this file:
+-- 1. Run migrations first: npm run migration:run
+-- 2. Then execute this file: psql -h localhost -U postgres -d tiny_shop -f src/database/seed/04-init-item-table.sql
 
--- Insert sample items
+-- Insert 8 sample items
 INSERT INTO item (
     item_id,
     name,
@@ -82,17 +88,20 @@ INSERT INTO item (
     1599.00,
     10,
     'Móveis'
-);
+)
+ON CONFLICT (sku) DO NOTHING; -- Prevents duplicate inserts
 
--- Verify the inserted data
-SELECT 
-    item_id,
-    name,
-    sku,
-    price,
-    quantity_available,
-    category,
-    created_at
+-- Display inserted items count
+SELECT 'Successfully inserted ' || COUNT(*) || ' items' as result
 FROM item 
-ORDER BY created_at;
+WHERE item_id IN (
+  '01JQZ9K1M2N3P4Q5R6S7T8U9V0',
+  '01JQZ9K1M2N3P4Q5R6S7T8U9V1',
+  '01JQZ9K1M2N3P4Q5R6S7T8U9V2',
+  '01JQZ9K1M2N3P4Q5R6S7T8U9V3',
+  '01JQZ9K1M2N3P4Q5R6S7T8U9V4',
+  '01JQZ9K1M2N3P4Q5R6S7T8U9V5',
+  '01JQZ9K1M2N3P4Q5R6S7T8U9V6',
+  '01JQZ9K1M2N3P4Q5R6S7T8U9V7'
+);
 
