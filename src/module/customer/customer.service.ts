@@ -13,17 +13,19 @@ export interface Customer {
   updated_at: Date;
 }
 
+const TABLE = 'customer';
+
 @Injectable()
 export class CustomerService {
   constructor(private databaseService: DatabaseService) {}
 
   async findAll(): Promise<Customer[]> {
-    return this.databaseService.query('SELECT * FROM customer');
+    return this.databaseService.query(`SELECT * FROM ${TABLE}`);
   }
 
   async findOne(id: number): Promise<Customer> {
     const customers = await this.databaseService.query(
-      'SELECT * FROM customer WHERE id = $1',
+      `SELECT * FROM ${TABLE} WHERE id = $1`,
       [id],
     );
 
@@ -36,7 +38,7 @@ export class CustomerService {
 
   async findByCustomerId(customerId: string): Promise<Customer | null> {
     const customers = await this.databaseService.query(
-      'SELECT * FROM customer WHERE customer_id = $1',
+      `SELECT * FROM ${TABLE} WHERE customer_id = $1`,
       [customerId],
     );
 
@@ -45,7 +47,7 @@ export class CustomerService {
 
   async findByEmail(email: string): Promise<Customer | null> {
     const customers = await this.databaseService.query(
-      'SELECT * FROM customer WHERE email = $1',
+      `SELECT * FROM ${TABLE} WHERE email = $1`,
       [email],
     );
 
@@ -62,7 +64,7 @@ export class CustomerService {
     const newCustomerUlid = this.generateUlid();
 
     const insertCustomerQuery = `
-      INSERT INTO customer (
+      INSERT INTO ${TABLE} (
         customer_id, first_name, last_name, email, phone_number, date_of_birth
       ) VALUES ($1, $2, $3, $4, $5, $6)
     `;
@@ -128,7 +130,7 @@ export class CustomerService {
     values.push(id);
 
     await this.databaseService.query(
-      `UPDATE customer SET ${updates.join(', ')} WHERE id = $${paramCount}`,
+      `UPDATE ${TABLE} SET ${updates.join(', ')} WHERE id = $${paramCount}`,
       values,
     );
 
@@ -137,7 +139,7 @@ export class CustomerService {
 
   async remove(id: number): Promise<Customer> {
     const customer = await this.findOne(id);
-    await this.databaseService.query('DELETE FROM customer WHERE id = $1', [
+    await this.databaseService.query(`DELETE FROM ${TABLE} WHERE id = $1`, [
       id,
     ]);
     return customer;

@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { AddressModule } from './module/address/address.module';
 import { CustomerModule } from './module/customer/customer.module';
 import { ItemModule } from './module/item/item.module';
+import { ShoppingCartModule } from './module/shopping-cart/shopping-cart.module';
 import { UserModule } from './module/user/user.module';
 
 @Module({
@@ -29,6 +30,7 @@ import { UserModule } from './module/user/user.module';
     CustomerModule,
     AddressModule,
     ItemModule,
+    ShoppingCartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
