@@ -11,17 +11,19 @@ export interface User {
   updated_at: Date;
 }
 
+const TABLE = '"user"';
+
 @Injectable()
 export class UserService {
   constructor(private databaseService: DatabaseService) {}
 
   async findAll(): Promise<User[]> {
-    return this.databaseService.query('SELECT * FROM "user"');
+    return this.databaseService.query(`SELECT * FROM ${TABLE}`);
   }
 
   async findOne(id: number): Promise<User> {
     const users = await this.databaseService.query(
-      'SELECT * FROM "user" WHERE id = $1',
+      `SELECT * FROM ${TABLE} WHERE id = $1`,
       [id],
     );
 
@@ -34,7 +36,7 @@ export class UserService {
 
   async findByUserId(userId: string): Promise<User | null> {
     const users = await this.databaseService.query(
-      'SELECT * FROM "user" WHERE user_id = $1',
+      `SELECT * FROM ${TABLE} WHERE user_id = $1`,
       [userId],
     );
 
@@ -48,8 +50,7 @@ export class UserService {
   }): Promise<User> {
     const newUserUlid = this.generateUlid();
 
-    const insertUserQuery =
-      'INSERT INTO "user" (user_id, fullname, email, password) VALUES ($1, $2, $3, $4)';
+    const insertUserQuery = `INSERT INTO ${TABLE} (user_id, fullname, email, password) VALUES ($1, $2, $3, $4)`;
 
     await this.databaseService.query(insertUserQuery, [
       newUserUlid,
@@ -94,7 +95,7 @@ export class UserService {
     values.push(id);
 
     await this.databaseService.query(
-      `UPDATE "user" SET ${updates.join(', ')} WHERE id = $${paramCount}`,
+      `UPDATE ${TABLE} SET ${updates.join(', ')} WHERE id = $${paramCount}`,
       values,
     );
 
@@ -103,7 +104,9 @@ export class UserService {
 
   async remove(id: number): Promise<User> {
     const user = await this.findOne(id);
-    await this.databaseService.query('DELETE FROM "user" WHERE id = $1', [id]);
+    await this.databaseService.query(`DELETE FROM ${TABLE} WHERE id = $1`, [
+      id,
+    ]);
     return user;
   }
 

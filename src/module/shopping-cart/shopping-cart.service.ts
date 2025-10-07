@@ -1,22 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { ulid } from 'ulid';
 import { DatabaseService } from '../../database/database.service';
+import { ShoppingCart, ShoppingCartItem } from './shopping-cart.model';
 
-export interface ShoppingCart {
-  id: number;
-  cart_id: string;
-  customer_id?: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface ShoppingCartItem {
-  id: number;
-  cart_id: string;
-  item_id: string;
-  quantity: number;
-  price: number;
-  added_at: Date;
-}
+const TABLE = 'shopping_cart';
 
 @Injectable()
 export class ShoppingCartService {
@@ -24,7 +11,7 @@ export class ShoppingCartService {
 
   async findByCartId(cartId: string): Promise<ShoppingCart | null> {
     const carts = await this.databaseService.query(
-      'SELECT * FROM shopping_cart WHERE cart_id = $1',
+      `SELECT * FROM ${TABLE} WHERE cart_id = $1`,
       [cartId],
     );
 
@@ -32,10 +19,10 @@ export class ShoppingCartService {
   }
 
   async create(createCartDto: { customer_id?: string }): Promise<ShoppingCart> {
-    const newCartUlid = this.generateUlid();
+    const newCartUlid = ulid();
 
     const insertCartQuery = `
-      INSERT INTO shopping_cart (cart_id, customer_id)
+      INSERT INTO ${TABLE} (cart_id, customer_id)
       VALUES ($1, $2)
     `;
 
@@ -127,10 +114,5 @@ export class ShoppingCartService {
       'DELETE FROM shopping_cart_item WHERE cart_id = $1 AND item_id = $2',
       [cartId, itemId],
     );
-  }
-
-  private generateUlid(): string {
-    // Simple ULID implementation - in production use a library like 'ulid'
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 }

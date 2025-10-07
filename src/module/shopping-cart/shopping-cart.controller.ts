@@ -4,11 +4,8 @@ import {
   CreateShoppingCartDto,
   UpdateItemQuantityDto,
 } from './shopping-cart.dto';
-import {
-  ShoppingCart,
-  ShoppingCartItem,
-  ShoppingCartService,
-} from './shopping-cart.service';
+import { ShoppingCart, ShoppingCartItem } from './shopping-cart.model';
+import { ShoppingCartService } from './shopping-cart.service';
 
 @Controller('shopping-cart')
 export class ShoppingCartController {

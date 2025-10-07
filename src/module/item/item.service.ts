@@ -14,17 +14,19 @@ export interface Item {
   updated_at: Date;
 }
 
+const TABLE = 'item';
+
 @Injectable()
 export class ItemService {
   constructor(private databaseService: DatabaseService) {}
 
   async findAll(): Promise<Item[]> {
-    return this.databaseService.query('SELECT * FROM item');
+    return this.databaseService.query(`SELECT * FROM ${TABLE}`);
   }
 
   async findOne(id: number): Promise<Item> {
     const items = await this.databaseService.query(
-      'SELECT * FROM item WHERE id = $1',
+      `SELECT * FROM ${TABLE} WHERE id = $1`,
       [id],
     );
 
@@ -37,7 +39,7 @@ export class ItemService {
 
   async findByItemId(itemId: string): Promise<Item | null> {
     const items = await this.databaseService.query(
-      'SELECT * FROM item WHERE item_id = $1',
+      `SELECT * FROM ${TABLE} WHERE item_id = $1`,
       [itemId],
     );
 
@@ -46,7 +48,7 @@ export class ItemService {
 
   async findBySku(sku: string): Promise<Item | null> {
     const items = await this.databaseService.query(
-      'SELECT * FROM item WHERE sku = $1',
+      `SELECT * FROM ${TABLE} WHERE sku = $1`,
       [sku],
     );
 
@@ -55,14 +57,14 @@ export class ItemService {
 
   async findByCategory(category: string): Promise<Item[]> {
     return this.databaseService.query(
-      'SELECT * FROM item WHERE category = $1',
+      `SELECT * FROM ${TABLE} WHERE category = $1`,
       [category],
     );
   }
 
   async findByName(name: string): Promise<Item[]> {
     return this.databaseService.query(
-      'SELECT * FROM item WHERE name ILIKE $1',
+      `SELECT * FROM ${TABLE} WHERE name ILIKE $1`,
       [`%${name}%`],
     );
   }
@@ -78,7 +80,7 @@ export class ItemService {
     const newItemUlid = this.generateUlid();
 
     const insertItemQuery = `
-      INSERT INTO item (
+      INSERT INTO ${TABLE} (
         item_id, name, description, sku, price, quantity_available, category
       ) VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
@@ -151,7 +153,7 @@ export class ItemService {
     values.push(id);
 
     await this.databaseService.query(
-      `UPDATE item SET ${updates.join(', ')} WHERE id = $${paramCount}`,
+      `UPDATE ${TABLE} SET ${updates.join(', ')} WHERE id = $${paramCount}`,
       values,
     );
 
@@ -160,7 +162,9 @@ export class ItemService {
 
   async remove(id: number): Promise<Item> {
     const item = await this.findOne(id);
-    await this.databaseService.query('DELETE FROM item WHERE id = $1', [id]);
+    await this.databaseService.query(`DELETE FROM ${TABLE} WHERE id = $1`, [
+      id,
+    ]);
     return item;
   }
 
