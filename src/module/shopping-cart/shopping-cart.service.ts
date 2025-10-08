@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ulid } from 'ulid';
 import { DatabaseService } from '../../database/database.service';
+import {
+  CartItemWithDetails,
+  CartWithItemsAndTotal,
+} from './shopping-cart.dto';
 import { ShoppingCart, ShoppingCartItem } from './shopping-cart.model';
 
 const TABLE = 'shopping_cart';
@@ -114,5 +118,56 @@ export class ShoppingCartService {
       'DELETE FROM shopping_cart_item WHERE cart_id = $1 AND item_id = $2',
       [cartId, itemId],
     );
+  }
+
+  async getCartWithItemsAndTotal(
+    cartId: string,
+  ): Promise<CartWithItemsAndTotal | null> {
+    // First, get the cart information
+    const cart = await this.findByCartId(cartId);
+    if (!cart) {
+      return null;
+    }
+
+    // Get cart items with item details
+    const itemsQuery = `
+      SELECT 
+        sci.id,
+        sci.cart_id,
+        sci.item_id,
+        sci.quantity,
+        sci.price,
+        sci.added_at,
+        i.name as item_name,
+        i.description as item_description,
+        i.sku as item_sku,
+        i.category as item_category,
+        (sci.quantity * sci.price) as subtotal
+      FROM shopping_cart_item sci
+      JOIN item i ON sci.item_id = i.item_id
+      WHERE sci.cart_id = $1
+      ORDER BY sci.added_at ASC
+    `;
+
+    const items = await this.databaseService.query(itemsQuery, [cartId]);
+
+    console.log(items);
+
+    // Calculate totals
+    const totalAmount = items.reduce(
+      (sum, item) => sum + parseFloat(item.subtotal),
+      0,
+    );
+    const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+
+    return {
+      cart_id: cart.cart_id,
+      customer_id: cart.customer_id,
+      created_at: cart.created_at,
+      updated_at: cart.updated_at,
+      items: items as CartItemWithDetails[],
+      total_amount: parseFloat(totalAmount.toFixed(2)),
+      total_items: totalItems,
+    };
   }
 }
