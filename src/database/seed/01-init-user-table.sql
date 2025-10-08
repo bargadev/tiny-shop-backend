@@ -10,7 +10,7 @@
 -- Insert 5 sample users
 INSERT INTO "user" (user_id, fullname, email, password, created_at, updated_at) VALUES
 (
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0V',
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0V',
   'João Silva',
   'joao.silva@email.com',
   '$2b$10$rQZ8xK9L2M3N4P5Q6R7S8T9U0V1W2X3Y4Z5A6B7C8D9E0F1G2H3I4J',
@@ -18,7 +18,7 @@ INSERT INTO "user" (user_id, fullname, email, password, created_at, updated_at) 
   CURRENT_TIMESTAMP
 ),
 (
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0W',
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0W',
   'Maria Santos',
   'maria.santos@email.com',
   '$2b$10$rQZ8xK9L2M3N4P5Q6R7S8T9U0V1W2X3Y4Z5A6B7C8D9E0F1G2H3I4K',
@@ -26,7 +26,7 @@ INSERT INTO "user" (user_id, fullname, email, password, created_at, updated_at) 
   CURRENT_TIMESTAMP
 ),
 (
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0X',
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0X',
   'Pedro Oliveira',
   'pedro.oliveira@email.com',
   '$2b$10$rQZ8xK9L2M3N4P5Q6R7S8T9U0V1W2X3Y4Z5A6B7C8D9E0F1G2H3I4L',
@@ -34,7 +34,7 @@ INSERT INTO "user" (user_id, fullname, email, password, created_at, updated_at) 
   CURRENT_TIMESTAMP
 ),
 (
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0Y',
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0Y',
   'Ana Costa',
   'ana.costa@email.com',
   '$2b$10$rQZ8xK9L2M3N4P5Q6R7S8T9U0V1W2X3Y4Z5A6B7C8D9E0F1G2H3I4M',
@@ -42,7 +42,7 @@ INSERT INTO "user" (user_id, fullname, email, password, created_at, updated_at) 
   CURRENT_TIMESTAMP
 ),
 (
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0Z',
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0Z',
   'Carlos Ferreira',
   'carlos.ferreira@email.com',
   '$2b$10$rQZ8xK9L2M3N4P5Q6R7S8T9U0V1W2X3Y4Z5A6B7C8D9E0F1G2H3I4N',
@@ -55,9 +55,9 @@ ON CONFLICT (email) DO NOTHING; -- Prevents duplicate inserts
 SELECT 'Successfully inserted ' || COUNT(*) || ' users' as result
 FROM "user" 
 WHERE user_id IN (
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0V',
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0W',
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0X',
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0Y',
-  '01JQ8X9K2M3N4P5Q6R7S8T9U0Z'
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0V',
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0W',
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0X',
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0Y',
+  '01JQ8X9K2M3N4P5Q6R7S8T9W0Z'
 );

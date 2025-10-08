@@ -132,8 +132,6 @@ export class ShoppingCartService {
     // Get cart items with item details
     const itemsQuery = `
       SELECT 
-        sci.id,
-        sci.cart_id,
         sci.item_id,
         sci.quantity,
         sci.price,

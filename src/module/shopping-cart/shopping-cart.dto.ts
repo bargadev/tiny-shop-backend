@@ -1,14 +1,28 @@
+import { IsNumber, IsPositive, Min } from 'class-validator';
+import { IsUlid } from '../../validators';
+
 export class CreateShoppingCartDto {
   customer_id?: string;
 }
 
 export class AddItemToCartDto {
+  @IsUlid()
   item_id: string;
+
+  @IsNumber()
+  @IsPositive()
+  @Min(1)
   quantity: number;
+
+  @IsNumber()
+  @IsPositive()
   price: number;
 }
 
 export class UpdateItemQuantityDto {
+  @IsNumber()
+  @IsPositive()
+  @Min(1)
   quantity: number;
 }
 
