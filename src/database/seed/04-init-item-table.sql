@@ -18,7 +18,7 @@ INSERT INTO item (
     category
 ) VALUES 
 (
-    '01JQZ9K1M2N3P4Q5R6S7T8U9V0',
+    '01JQZ9K1M2N3P4Q5R6S7T8W9V0',
     'Notebook Dell Inspiron 15',
     'Notebook Dell Inspiron 15 com processador Intel Core i5, 8GB RAM, SSD 256GB',
     'NB-DELL-I15-001',
@@ -27,7 +27,7 @@ INSERT INTO item (
     'Eletrônicos'
 ),
 (
-    '01JQZ9K1M2N3P4Q5R6S7T8U9V1',
+    '01JQZ9K1M2N3P4Q5R6S7T8W9V1',
     'Mouse Logitech MX Master 3',
     'Mouse sem fio Logitech MX Master 3 com sensor de alta precisão e bateria recarregável',
     'MS-LOG-MX3-001',
@@ -36,7 +36,7 @@ INSERT INTO item (
     'Periféricos'
 ),
 (
-    '01JQZ9K1M2N3P4Q5R6S7T8U9V2',
+    '01JQZ9K1M2N3P4Q5R6S7T8W9V2',
     'Teclado Mecânico Keychron K2',
     'Teclado mecânico sem fio Keychron K2 com switches Gateron Brown e retroiluminação RGB',
     'KB-KEY-K2-001',
@@ -45,7 +45,7 @@ INSERT INTO item (
     'Periféricos'
 ),
 (
-    '01JQZ9K1M2N3P4Q5R6S7T8U9V3',
+    '01JQZ9K1M2N3P4Q5R6S7T8W9V3',
     'Monitor LG UltraWide 29"',
     'Monitor LG UltraWide 29 polegadas Full HD IPS com suporte a HDR10',
     'MN-LG-UW29-001',
@@ -54,7 +54,7 @@ INSERT INTO item (
     'Monitores'
 ),
 (
-    '01JQZ9K1M2N3P4Q5R6S7T8U9V4',
+    '01JQZ9K1M2N3P4Q5R6S7T8W9V4',
     'Webcam Logitech C920',
     'Webcam Full HD 1080p Logitech C920 com microfone estéreo integrado',
     'WC-LOG-C920-001',
@@ -63,7 +63,7 @@ INSERT INTO item (
     'Periféricos'
 ),
 (
-    '01JQZ9K1M2N3P4Q5R6S7T8U9V5',
+    '01JQZ9K1M2N3P4Q5R6S7T8W9V5',
     'SSD Samsung 1TB',
     'SSD Samsung 970 EVO Plus NVMe M.2 1TB com velocidade de leitura até 3500MB/s',
     'SSD-SAM-970-1TB',
@@ -72,7 +72,7 @@ INSERT INTO item (
     'Armazenamento'
 ),
 (
-    '01JQZ9K1M2N3P4Q5R6S7T8U9V6',
+    '01JQZ9K1M2N3P4Q5R6S7T8W9V6',
     'Headset HyperX Cloud II',
     'Headset gamer HyperX Cloud II com som surround 7.1 e microfone removível',
     'HS-HYP-CL2-001',
@@ -81,7 +81,7 @@ INSERT INTO item (
     'Áudio'
 ),
 (
-    '01JQZ9K1M2N3P4Q5R6S7T8U9V7',
+    '01JQZ9K1M2N3P4Q5R6S7T8W9V7',
     'Cadeira Gamer DXRacer',
     'Cadeira gamer DXRacer ergonômica com ajuste de altura e apoio lombar',
     'CH-DXR-001',
@@ -95,13 +95,13 @@ ON CONFLICT (sku) DO NOTHING; -- Prevents duplicate inserts
 SELECT 'Successfully inserted ' || COUNT(*) || ' items' as result
 FROM item 
 WHERE item_id IN (
-  '01JQZ9K1M2N3P4Q5R6S7T8U9V0',
-  '01JQZ9K1M2N3P4Q5R6S7T8U9V1',
-  '01JQZ9K1M2N3P4Q5R6S7T8U9V2',
-  '01JQZ9K1M2N3P4Q5R6S7T8U9V3',
-  '01JQZ9K1M2N3P4Q5R6S7T8U9V4',
-  '01JQZ9K1M2N3P4Q5R6S7T8U9V5',
-  '01JQZ9K1M2N3P4Q5R6S7T8U9V6',
-  '01JQZ9K1M2N3P4Q5R6S7T8U9V7'
+  '01JQZ9K1M2N3P4Q5R6S7T8W9V0',
+  '01JQZ9K1M2N3P4Q5R6S7T8W9V1',
+  '01JQZ9K1M2N3P4Q5R6S7T8W9V2',
+  '01JQZ9K1M2N3P4Q5R6S7T8W9V3',
+  '01JQZ9K1M2N3P4Q5R6S7T8W9V4',
+  '01JQZ9K1M2N3P4Q5R6S7T8W9V5',
+  '01JQZ9K1M2N3P4Q5R6S7T8W9V6',
+  '01JQZ9K1M2N3P4Q5R6S7T8W9V7'
 );
 

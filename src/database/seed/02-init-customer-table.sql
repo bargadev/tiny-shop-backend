@@ -18,7 +18,7 @@ INSERT INTO customer (
     date_of_birth
 ) VALUES 
 (
-    '01JQZ8K9M2N3P4Q5R6S7T8U9V0',
+    '01JQZ8K9M2N3P4Q5R6S7T8W9V0',
     'João',
     'Silva',
     'joao.silva@email.com',
@@ -26,7 +26,7 @@ INSERT INTO customer (
     '1990-05-15'
 ),
 (
-    '01JQZ8K9M2N3P4Q5R6S7T8U9V1',
+    '01JQZ8K9M2N3P4Q5R6S7T8W9V1',
     'Maria',
     'Santos',
     'maria.santos@email.com',
@@ -34,7 +34,7 @@ INSERT INTO customer (
     '1985-12-03'
 ),
 (
-    '01JQZ8K9M2N3P4Q5R6S7T8U9V2',
+    '01JQZ8K9M2N3P4Q5R6S7T8W9V2',
     'Pedro',
     'Oliveira',
     'pedro.oliveira@email.com',
@@ -42,7 +42,7 @@ INSERT INTO customer (
     '1992-08-22'
 ),
 (
-    '01JQZ8K9M2N3P4Q5R6S7T8U9V3',
+    '01JQZ8K9M2N3P4Q5R6S7T8W9V3',
     'Ana',
     'Costa',
     'ana.costa@email.com',
@@ -50,7 +50,7 @@ INSERT INTO customer (
     '1988-03-10'
 ),
 (
-    '01JQZ8K9M2N3P4Q5R6S7T8U9V4',
+    '01JQZ8K9M2N3P4Q5R6S7T8W9V4',
     'Carlos',
     'Ferreira',
     'carlos.ferreira@email.com',
@@ -63,9 +63,9 @@ ON CONFLICT (email) DO NOTHING; -- Prevents duplicate inserts
 SELECT 'Successfully inserted ' || COUNT(*) || ' customers' as result
 FROM customer 
 WHERE customer_id IN (
-  '01JQZ8K9M2N3P4Q5R6S7T8U9V0',
-  '01JQZ8K9M2N3P4Q5R6S7T8U9V1',
-  '01JQZ8K9M2N3P4Q5R6S7T8U9V2',
-  '01JQZ8K9M2N3P4Q5R6S7T8U9V3',
-  '01JQZ8K9M2N3P4Q5R6S7T8U9V4'
+  '01JQZ8K9M2N3P4Q5R6S7T8W9V0',
+  '01JQZ8K9M2N3P4Q5R6S7T8W9V1',
+  '01JQZ8K9M2N3P4Q5R6S7T8W9V2',
+  '01JQZ8K9M2N3P4Q5R6S7T8W9V3',
+  '01JQZ8K9M2N3P4Q5R6S7T8W9V4'
 );

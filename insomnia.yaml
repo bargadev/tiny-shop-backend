@@ -1,0 +1,788 @@
+type: collection.insomnia.rest/5.0
+name: Tiny Shop Backend
+meta:
+  id: wrk_803ff4dcbfca4b8c8151f675917e73e3
+  created: 1759922523391
+  modified: 1759922523391
+  description: ""
+collection:
+  - url: "{{ _.base_url }}/"
+    name: root
+    meta:
+      id: req_93dbc0e1284b41ec9fabf7e7798cfa57
+      created: 1706572800000
+      modified: 1706572800000
+      isPrivate: false
+      description: Página inicial da API
+      sortKey: -1706572800001
+    method: GET
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/health"
+    name: health check
+    meta:
+      id: req_f8ccb4adaa474a2e8397c7c91594f607
+      created: 1706572800000
+      modified: 1706572800000
+      isPrivate: false
+      description: Verifica o status da aplicação
+      sortKey: -1706572800000
+    method: GET
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - name: items
+    meta:
+      id: fld_106979ded4244ebbb5e05be3cdfa8b4f
+      created: 1706572800000
+      modified: 1706572800000
+      sortKey: -1706572800005
+      description: Endpoints para gerenciamento de itens/produtos
+    children:
+      - url: "{{ _.base_url }}/item"
+        name: get all items
+        meta:
+          id: req_0a6206d6ec71420d988d41500f3055ec
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Lista todos os itens
+          sortKey: -1706572800000
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/item/{{ _.item_id }}"
+        name: delete item
+        meta:
+          id: req_43232d132c8a4a72ab35d49fa09ede56
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Remove um item
+          sortKey: -1706572800005
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/item"
+        name: create item
+        meta:
+          id: req_ca9bca6cb4724ec68cbe29d8e04adea4
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Cria um novo item
+          sortKey: -1706572800005
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Produto Exemplo",
+              "description": "Descrição do produto",
+              "sku": "SKU123456",
+              "price": 29.99,
+              "quantity_available": 100,
+              "category": "Eletrônicos"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/item?name={{ _.search_term }}"
+        name: search items by name
+        meta:
+          id: req_d0425834c8a4491097a09219d536aede
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Busca itens por nome
+          sortKey: -1706572800001
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/item/{{ _.item_id }}"
+        name: get item by id
+        meta:
+          id: req_d6712b8d407c4e1383ba3736f6416187
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Busca um item específico por ID
+          sortKey: -1706572800005
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/item/{{ _.item_id }}"
+        name: update item
+        meta:
+          id: req_e91eb4821f224ec4898895168d9b5b36
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Atualiza um item existente
+          sortKey: -1706572800005
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Produto Atualizado",
+              "price": 39.99,
+              "quantity_available": 150
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: shopping-cart
+    meta:
+      id: fld_22309e7f22c8494a839b9ca8bbc47f34
+      created: 1706572800000
+      modified: 1759922547224
+      sortKey: -1706572800000
+      description: Endpoints para gerenciamento de carrinho de compras
+    children:
+      - url: "{{ _.base_url }}/shopping-cart/{% response 'body',
+          'req_4c51a35bd89540c68e9836c33d6ebaf3', 'b64::JC5jYXJ0X2lk::46b',
+          'never', 60 %}/items"
+        name: add item to cart
+        meta:
+          id: req_1041cee0fe2d4606b512289bd7217e53
+          created: 1706572800000
+          modified: 1759923895061
+          isPrivate: false
+          description: Adiciona um item ao carrinho de compras
+          sortKey: -1706572800001.25
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "item_id": "01JQZ9K1M2N3P4Q5R6S7T8W9V0",
+              "quantity": 1,
+              "price": 29.99
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/shopping-cart/{{ _.cart_id }}/items/{{ _.item_id }}"
+        name: update item quantity
+        meta:
+          id: req_47d6637d58d54af49d559238b94d8ba4
+          created: 1706572800000
+          modified: 1759922559099
+          isPrivate: false
+          description: Atualiza a quantidade de um item no carrinho
+          sortKey: -1706572800005
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantity": 3
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/shopping-cart"
+        name: create shopping cart with customer
+        meta:
+          id: req_4b991de424274484a7ad07b5211ed76d
+          created: 1706572800000
+          modified: 1759922958186
+          isPrivate: false
+          description: Cria um carrinho de compras com customer_id
+          sortKey: -1706572800001.875
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "customer_id": "{{ _.customer_id }}"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/shopping-cart"
+        name: create shopping cart guest
+        meta:
+          id: req_4c51a35bd89540c68e9836c33d6ebaf3
+          created: 1706572800000
+          modified: 1759922576799
+          isPrivate: false
+          description: Cria um carrinho de compras sem customer_id (guest)
+          sortKey: -1706572800002.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: "{}"
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/shopping-cart/{{ _.cart_id }}/items/{{ _.item_id }}"
+        name: remove item from cart
+        meta:
+          id: req_6daeb9ba4eb24a27ade7d47473e76b2b
+          created: 1706572800000
+          modified: 1759922544774
+          isPrivate: false
+          description: Remove um item do carrinho de compras
+          sortKey: -1706572800005
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/shopping-cart/{% response 'body',
+          'req_4c51a35bd89540c68e9836c33d6ebaf3', 'b64::JC5jYXJ0X2lk::46b',
+          'never', 60 %}"
+        name: get cart with price
+        meta:
+          id: req_51315338bf8a4c698bf458a5f03d7d5a
+          created: 1759922966114
+          modified: 1759923003640
+          isPrivate: false
+          description: Adiciona um item ao carrinho de compras
+          sortKey: -1706572800001.125
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: users
+    meta:
+      id: fld_2f2695cdfcb846b0bccda3d3da8f63d2
+      created: 1706572800000
+      modified: 1706572800000
+      sortKey: -1706572800005
+      description: Endpoints para gerenciamento de usuários
+    children:
+      - url: "{{ _.base_url }}/users/{{ _.user_id }}"
+        name: update user
+        meta:
+          id: req_7722e93b9d70466980bf6f755bf096f4
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Atualiza um usuário existente
+          sortKey: -1706572800005
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "fullname": "João Silva Atualizado",
+              "email": "joao.novo@example.com"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/users/{{ _.user_id }}"
+        name: delete user
+        meta:
+          id: req_8852a8971de44291b7e15010de62f0f7
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Remove um usuário
+          sortKey: -1706572800005
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/users"
+        name: create user
+        meta:
+          id: req_e06a99c2719245559761edd04d88b5dc
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Cria um novo usuário
+          sortKey: -1706572800005
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "fullname": "João Silva",
+              "email": "joao@example.com",
+              "password": "senha123"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/users"
+        name: get all users
+        meta:
+          id: req_f0326ecdf4f24bd3a703b359782ce6a7
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Lista todos os usuários
+          sortKey: -1706572800000
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/users/{{ _.user_id }}"
+        name: get user by id
+        meta:
+          id: req_f3ad6c24884a42b4961872539020b67b
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Busca um usuário específico por ID
+          sortKey: -1706572800001
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: addresses
+    meta:
+      id: fld_7a868eb87f2d4b33a78729ae33a9c725
+      created: 1706572800000
+      modified: 1706572800000
+      sortKey: -1706572800001
+      description: Endpoints para gerenciamento de endereços
+    children:
+      - url: "{{ _.base_url }}/address"
+        name: create address
+        meta:
+          id: req_2b1f7a511a314fd6b4170d72a56fe35b
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Cria um novo endereço
+          sortKey: -1706572800005
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "customerId": "{{ _.customer_id }}",
+              "street": "Rua das Flores",
+              "number": "123",
+              "complement": "Apto 45",
+              "neighborhood": "Centro",
+              "city": "São Paulo",
+              "state": "SP",
+              "postalCode": "01234-567",
+              "country": "Brasil",
+              "isPrimary": true
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/address/customer/{{ _.customer_id }}"
+        name: get addresses by customer
+        meta:
+          id: req_592ab1ae959c4b69899f88cb3e4c4875
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Busca endereços de um cliente específico
+          sortKey: -1706572800005
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/address/{{ _.address_id }}/set-primary"
+        name: set primary address
+        meta:
+          id: req_61609f7904ba4889952146cde0793843
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Define um endereço como primário
+          sortKey: -1706572800006
+        method: PATCH
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/address/{{ _.address_id }}"
+        name: delete address
+        meta:
+          id: req_6649205f26f44f3c8e6da10c87f10863
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Remove um endereço
+          sortKey: -1706572800007
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/address/{{ _.address_id }}"
+        name: get address by id
+        meta:
+          id: req_804623c13df942cb97483e706fc5aefe
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Busca um endereço específico por ID
+          sortKey: -1706572800001
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/address/customer/{{ _.customer_id }}/primary"
+        name: get primary address
+        meta:
+          id: req_905f27a95cbf4e1390f305d6dfdbbe49
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Busca o endereço primário de um cliente
+          sortKey: -1706572800005
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/address/{{ _.address_id }}"
+        name: update address
+        meta:
+          id: req_aa5f46ebcd994449b7c318000b8630aa
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Atualiza um endereço existente
+          sortKey: -1706572800005
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "street": "Rua das Palmeiras",
+              "number": "456",
+              "neighborhood": "Vila Nova"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/address"
+        name: get all addresses
+        meta:
+          id: req_ca95d3de6b4a4a17896d0feb7a91886a
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Lista todos os endereços
+          sortKey: -1706572800000
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: customers
+    meta:
+      id: fld_fe71c2a6abc2476ab78d213ad1051b40
+      created: 1706572800000
+      modified: 1706572800000
+      sortKey: -1706572800005
+      description: Endpoints para gerenciamento de clientes
+    children:
+      - url: "{{ _.base_url }}/customer/{{ _.customer_id }}"
+        name: update customer
+        meta:
+          id: req_29f977b23f944a14a75999a7e07b7a59
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Atualiza um cliente existente
+          sortKey: -1706572800005
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "first_name": "João Atualizado",
+              "phone_number": "(11) 88888-8888"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/customer"
+        name: get all customers
+        meta:
+          id: req_3f45cd8445844aa69648315a833962be
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Lista todos os clientes
+          sortKey: -1706572800000
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/customer/{{ _.customer_id }}"
+        name: get customer by id
+        meta:
+          id: req_bdbae79fd5264fca9bf69f68a310de39
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Busca um cliente específico por ID
+          sortKey: -1706572800001
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/customer/{{ _.customer_id }}"
+        name: delete customer
+        meta:
+          id: req_be5e98153e3a49eaa56f6dd71bf97b2a
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Remove um cliente
+          sortKey: -1706572800005
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/customer"
+        name: create customer
+        meta:
+          id: req_fe9728eb0c264375b94f549468b9952b
+          created: 1706572800000
+          modified: 1706572800000
+          isPrivate: false
+          description: Cria um novo cliente
+          sortKey: -1706572800005
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "first_name": "João",
+              "last_name": "Silva",
+              "email": "joao@example.com",
+              "phone_number": "(11) 99999-9999",
+              "date_of_birth": "1990-01-01"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_767ca08f6d17786a7115871bc3e32e92a4cccd1c
+    created: 1759922523414
+    modified: 1759922523414
+environments:
+  name: Base Environment
+  meta:
+    id: env_6bee90dc232d4409b98a693392aaaaa3
+    created: 1706572800000
+    modified: 1706572800000
+    isPrivate: false
+  data:
+    base_url: http://localhost:3000
+    user_id: "1"
+    customer_id: 01HZ123456789ABCDEFGHIJKLMN
+    address_id: "1"
+    item_id: "1"
+    cart_id: 01HZ123456789ABCDEFGHIJKLMN
+    search_term: produto
