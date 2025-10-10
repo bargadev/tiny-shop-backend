@@ -3,18 +3,19 @@ import { IsUlid } from '../../validators';
 
 export interface Address {
   id: number;
-  customer_id: string;
+  addressId: string;
+  customerId: string;
   street: string;
   number: string;
   complement?: string;
   neighborhood: string;
   city: string;
   state: string;
-  postal_code: string;
+  postalCode: string;
   country: string;
-  is_primary: boolean;
-  created_at: Date;
-  updated_at: Date;
+  isPrimary: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export class CreateAddressDto {

@@ -3,12 +3,12 @@ import { DatabaseService } from '../../database/database.service';
 
 export interface User {
   id: number;
-  user_id: string;
+  userId: string;
   fullname: string;
   email: string;
   password: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const TABLE = '"user"';
@@ -36,7 +36,7 @@ export class UserService {
 
   async findByUserId(userId: string): Promise<User | null> {
     const users = await this.databaseService.query(
-      `SELECT * FROM ${TABLE} WHERE user_id = $1`,
+      `SELECT * FROM ${TABLE} WHERE "userId" = $1`,
       [userId],
     );
 
@@ -50,7 +50,7 @@ export class UserService {
   }): Promise<User> {
     const newUserUlid = this.generateUlid();
 
-    const insertUserQuery = `INSERT INTO ${TABLE} (user_id, fullname, email, password) VALUES ($1, $2, $3, $4)`;
+    const insertUserQuery = `INSERT INTO ${TABLE} ("userId", fullname, email, password) VALUES ($1, $2, $3, $4)`;
 
     await this.databaseService.query(insertUserQuery, [
       newUserUlid,
@@ -91,7 +91,7 @@ export class UserService {
       return user;
     }
 
-    updates.push(`updated_at = CURRENT_TIMESTAMP`);
+    updates.push(`"updatedAt" = CURRENT_TIMESTAMP`);
     values.push(id);
 
     await this.databaseService.query(

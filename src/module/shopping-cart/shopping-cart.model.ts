@@ -1,16 +1,16 @@
 export interface ShoppingCart {
   id: number;
-  cart_id: string;
-  customer_id?: string;
-  created_at: Date;
-  updated_at: Date;
+  cartId: string;
+  customerId?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ShoppingCartItem {
   id: number;
-  cart_id: string;
-  item_id: string;
+  cartId: string;
+  itemId: string;
   quantity: number;
   price: number;
-  added_at: Date;
+  addedAt: Date;
 }

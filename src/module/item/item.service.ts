@@ -3,15 +3,15 @@ import { DatabaseService } from '../../database/database.service';
 
 export interface Item {
   id: number;
-  item_id: string;
+  itemId: string;
   name: string;
   description?: string;
   sku: string;
   price: number;
-  quantity_available: number;
+  quantityAvailable: number;
   category: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const TABLE = 'item';
@@ -39,7 +39,7 @@ export class ItemService {
 
   async findByItemId(itemId: string): Promise<Item | null> {
     const items = await this.databaseService.query(
-      `SELECT * FROM ${TABLE} WHERE item_id = $1`,
+      `SELECT * FROM ${TABLE} WHERE "itemId" = $1`,
       [itemId],
     );
 
@@ -74,14 +74,14 @@ export class ItemService {
     description?: string;
     sku: string;
     price: number;
-    quantity_available?: number;
+    quantityAvailable?: number;
     category: string;
   }): Promise<Item> {
     const newItemUlid = this.generateUlid();
 
     const insertItemQuery = `
       INSERT INTO ${TABLE} (
-        item_id, name, description, sku, price, quantity_available, category
+        "itemId", name, description, sku, price, "quantityAvailable", category
       ) VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
 
@@ -91,7 +91,7 @@ export class ItemService {
       createItemDto.description || null,
       createItemDto.sku,
       createItemDto.price,
-      createItemDto.quantity_available ?? 0,
+      createItemDto.quantityAvailable ?? 0,
       createItemDto.category,
     ]);
 
@@ -105,7 +105,7 @@ export class ItemService {
       description?: string;
       sku?: string;
       price?: number;
-      quantity_available?: number;
+      quantityAvailable?: number;
       category?: string;
     },
   ): Promise<Item> {
@@ -135,9 +135,9 @@ export class ItemService {
       values.push(updateItemDto.price);
     }
 
-    if (updateItemDto.quantity_available !== undefined) {
-      updates.push(`quantity_available = $${paramCount++}`);
-      values.push(updateItemDto.quantity_available);
+    if (updateItemDto.quantityAvailable !== undefined) {
+      updates.push(`"quantityAvailable" = $${paramCount++}`);
+      values.push(updateItemDto.quantityAvailable);
     }
 
     if (updateItemDto.category) {
@@ -149,7 +149,7 @@ export class ItemService {
       return item;
     }
 
-    updates.push(`updated_at = CURRENT_TIMESTAMP`);
+    updates.push(`"updatedAt" = CURRENT_TIMESTAMP`);
     values.push(id);
 
     await this.databaseService.query(

@@ -15,24 +15,24 @@ export class ShoppingCartService {
 
   async findByCartId(cartId: string): Promise<ShoppingCart | null> {
     const carts = await this.databaseService.query(
-      `SELECT * FROM ${TABLE} WHERE cart_id = $1`,
+      `SELECT * FROM ${TABLE} WHERE "cartId" = $1`,
       [cartId],
     );
 
     return carts.length > 0 ? carts[0] : null;
   }
 
-  async create(createCartDto: { customer_id?: string }): Promise<ShoppingCart> {
+  async create(createCartDto: { customerId?: string }): Promise<ShoppingCart> {
     const newCartUlid = ulid();
 
     const insertCartQuery = `
-      INSERT INTO ${TABLE} (cart_id, customer_id)
+      INSERT INTO ${TABLE} ("cartId", "customerId")
       VALUES ($1, $2)
     `;
 
     await this.databaseService.query(insertCartQuery, [
       newCartUlid,
-      createCartDto.customer_id || null,
+      createCartDto.customerId || null,
     ]);
 
     return this.findByCartId(newCartUlid);
@@ -46,7 +46,7 @@ export class ShoppingCartService {
   ): Promise<ShoppingCartItem> {
     // Check if item already exists in cart
     const existingItems = await this.databaseService.query(
-      'SELECT * FROM shopping_cart_item WHERE cart_id = $1 AND item_id = $2',
+      'SELECT * FROM shopping_cart_item WHERE "cartId" = $1 AND "itemId" = $2',
       [cartId, itemId],
     );
 
@@ -54,19 +54,19 @@ export class ShoppingCartService {
       // Update quantity if item already exists
       const newQuantity = existingItems[0].quantity + quantity;
       await this.databaseService.query(
-        'UPDATE shopping_cart_item SET quantity = $1 WHERE cart_id = $2 AND item_id = $3',
+        'UPDATE shopping_cart_item SET quantity = $1 WHERE "cartId" = $2 AND "itemId" = $3',
         [newQuantity, cartId, itemId],
       );
       return this.databaseService
         .query(
-          'SELECT * FROM shopping_cart_item WHERE cart_id = $1 AND item_id = $2',
+          'SELECT * FROM shopping_cart_item WHERE "cartId" = $1 AND "itemId" = $2',
           [cartId, itemId],
         )
         .then((result) => result[0]);
     } else {
       // Add new item to cart
       const insertItemQuery = `
-        INSERT INTO shopping_cart_item (cart_id, item_id, quantity, price)
+        INSERT INTO shopping_cart_item ("cartId", "itemId", quantity, price)
         VALUES ($1, $2, $3, $4)
       `;
 
@@ -79,7 +79,7 @@ export class ShoppingCartService {
 
       return this.databaseService
         .query(
-          'SELECT * FROM shopping_cart_item WHERE cart_id = $1 AND item_id = $2',
+          'SELECT * FROM shopping_cart_item WHERE "cartId" = $1 AND "itemId" = $2',
           [cartId, itemId],
         )
         .then((result) => result[0]);
@@ -94,20 +94,20 @@ export class ShoppingCartService {
     if (quantity <= 0) {
       // Remove item if quantity is 0 or negative
       await this.databaseService.query(
-        'DELETE FROM shopping_cart_item WHERE cart_id = $1 AND item_id = $2',
+        'DELETE FROM shopping_cart_item WHERE "cartId" = $1 AND "itemId" = $2',
         [cartId, itemId],
       );
       return null;
     }
 
     await this.databaseService.query(
-      'UPDATE shopping_cart_item SET quantity = $1 WHERE cart_id = $2 AND item_id = $3',
+      'UPDATE shopping_cart_item SET quantity = $1 WHERE "cartId" = $2 AND "itemId" = $3',
       [quantity, cartId, itemId],
     );
 
     return this.databaseService
       .query(
-        'SELECT * FROM shopping_cart_item WHERE cart_id = $1 AND item_id = $2',
+        'SELECT * FROM shopping_cart_item WHERE "cartId" = $1 AND "itemId" = $2',
         [cartId, itemId],
       )
       .then((result) => result[0]);
@@ -115,7 +115,7 @@ export class ShoppingCartService {
 
   async removeItemFromCart(cartId: string, itemId: string): Promise<void> {
     await this.databaseService.query(
-      'DELETE FROM shopping_cart_item WHERE cart_id = $1 AND item_id = $2',
+      'DELETE FROM shopping_cart_item WHERE "cartId" = $1 AND "itemId" = $2',
       [cartId, itemId],
     );
   }
@@ -132,24 +132,22 @@ export class ShoppingCartService {
     // Get cart items with item details
     const itemsQuery = `
       SELECT 
-        sci.item_id,
+        sci."itemId",
         sci.quantity,
         sci.price,
-        sci.added_at,
-        i.name as item_name,
-        i.description as item_description,
-        i.sku as item_sku,
-        i.category as item_category,
+        sci."addedAt",
+        i.name as "itemName",
+        i.description as "itemDescription",
+        i.sku as "itemSku",
+        i.category as "itemCategory",
         (sci.quantity * sci.price) as subtotal
       FROM shopping_cart_item sci
-      JOIN item i ON sci.item_id = i.item_id
-      WHERE sci.cart_id = $1
-      ORDER BY sci.added_at ASC
+      JOIN item i ON sci."itemId" = i."itemId"
+      WHERE sci."cartId" = $1
+      ORDER BY sci."addedAt" ASC
     `;
 
     const items = await this.databaseService.query(itemsQuery, [cartId]);
-
-    console.log(items);
 
     // Calculate totals
     const totalAmount = items.reduce(
@@ -159,13 +157,13 @@ export class ShoppingCartService {
     const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
     return {
-      cart_id: cart.cart_id,
-      customer_id: cart.customer_id,
-      created_at: cart.created_at,
-      updated_at: cart.updated_at,
+      cartId: cart.cartId,
+      customerId: cart.customerId,
+      createdAt: cart.createdAt,
+      updatedAt: cart.updatedAt,
       items: items as CartItemWithDetails[],
-      total_amount: parseFloat(totalAmount.toFixed(2)),
-      total_items: totalItems,
+      totalAmount: parseFloat(totalAmount.toFixed(2)),
+      totalItems: totalItems,
     };
   }
 }
