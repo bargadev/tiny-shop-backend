@@ -61,6 +61,16 @@ O arquivo insere endereços de exemplo associados aos clientes.
 
 O arquivo insere 8 items de exemplo incluindo notebooks, periféricos, monitores e acessórios para informática.
 
+### Métodos de Pagamento (`04.5-init-payment-method-table.sql`)
+
+O arquivo insere os métodos de pagamento disponíveis no sistema:
+
+- **Credit Card**: Pagamento via cartão de crédito com opções de parcelamento
+- **Debit Card**: Pagamento direto via cartão de débito
+- **PIX**: Pagamento instantâneo via PIX
+- **Bank Slip**: Pagamento via boleto bancário
+- **Cash**: Pagamento em dinheiro na entrega
+
 ### Carrinhos de Compras (`05-init-shopping-cart-table.sql`)
 
 O arquivo insere 5 carrinhos de compras, um para cada cliente cadastrado.
@@ -73,11 +83,11 @@ O arquivo insere itens nos carrinhos de compras, relacionando os produtos com os
 
 O arquivo insere 3 pedidos de exemplo:
 
-- **João Silva**: Pedido entregue (delivered) - Notebook + Mouse + Teclado
-- **Maria Santos**: Pedido enviado (shipped) - 2 Monitores + Webcam
-- **Ana Costa**: Pedido pago (paid) - Cadeira Gamer + Notebook + Monitor
+- **João Silva**: Pedido entregue (delivered) - Notebook + Mouse + Teclado - Pagamento: Credit Card
+- **Maria Santos**: Pedido enviado (shipped) - 2 Monitores + Webcam - Pagamento: Debit Card
+- **Ana Costa**: Pedido pago (paid) - Cadeira Gamer + Notebook + Monitor - Pagamento: PIX
 
-Os pedidos estão vinculados aos carrinhos de compras, clientes e endereços de entrega correspondentes.
+Os pedidos estão vinculados aos carrinhos de compras, clientes, endereços de entrega e métodos de pagamento correspondentes.
 
 ## 🔄 Resetar o banco (se necessário)
 
