@@ -19,5 +19,8 @@ PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/se
 PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seed/02-init-customer-table.sql
 PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seed/03-init-address-table.sql
 PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seed/04-init-item-table.sql
+PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seed/05-init-shopping-cart-table.sql
+PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seed/06-init-shopping-cart-item-table.sql
+PGPASSWORD=postgres psql -h postgres -U postgres -d tiny_shop -f src/database/seed/07-init-order-table.sql
 
 echo "Database initialization complete!"
