@@ -61,6 +61,24 @@ O arquivo insere endereços de exemplo associados aos clientes.
 
 O arquivo insere 8 items de exemplo incluindo notebooks, periféricos, monitores e acessórios para informática.
 
+### Carrinhos de Compras (`05-init-shopping-cart-table.sql`)
+
+O arquivo insere 5 carrinhos de compras, um para cada cliente cadastrado.
+
+### Itens do Carrinho (`06-init-shopping-cart-item-table.sql`)
+
+O arquivo insere itens nos carrinhos de compras, relacionando os produtos com os carrinhos dos clientes. Cada carrinho possui de 3 a 4 itens com diferentes quantidades.
+
+### Pedidos (`07-init-order-table.sql`)
+
+O arquivo insere 3 pedidos de exemplo:
+
+- **João Silva**: Pedido entregue (delivered) - Notebook + Mouse + Teclado
+- **Maria Santos**: Pedido enviado (shipped) - 2 Monitores + Webcam
+- **Ana Costa**: Pedido pago (paid) - Cadeira Gamer + Notebook + Monitor
+
+Os pedidos estão vinculados aos carrinhos de compras, clientes e endereços de entrega correspondentes.
+
 ## 🔄 Resetar o banco (se necessário)
 
 Se precisar resetar completamente o banco e executar os seeds novamente:
