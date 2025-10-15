@@ -3,12 +3,12 @@ import { DatabaseService } from '../../database/database.service';
 
 export interface PaymentMethod {
   id: number;
-  payment_method_id: string;
+  paymentMethodId: string;
   name: string;
   description?: string;
-  is_active: boolean;
-  created_at: Date;
-  updated_at: Date;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const TABLE = 'payment_method';
@@ -19,7 +19,7 @@ export class PaymentMethodService {
 
   async findAll(): Promise<PaymentMethod[]> {
     return this.databaseService.query(
-      `SELECT * FROM ${TABLE} WHERE is_active = true ORDER BY id`,
+      `SELECT * FROM ${TABLE} WHERE "isActive" = true ORDER BY id`,
     );
   }
 }

@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { AddressModule } from './module/address/address.module';
 import { CustomerModule } from './module/customer/customer.module';
 import { ItemModule } from './module/item/item.module';
+import { OrderModule } from './module/order/order.module';
 import { PaymentMethodModule } from './module/payment-method/payment-method.module';
 import { ShoppingCartModule } from './module/shopping-cart/shopping-cart.module';
 import { UserModule } from './module/user/user.module';
@@ -32,6 +33,7 @@ import { UserModule } from './module/user/user.module';
     AddressModule,
     ItemModule,
     PaymentMethodModule,
+    OrderModule,
     ShoppingCartModule,
   ],
   controllers: [AppController],

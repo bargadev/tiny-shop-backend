@@ -3,14 +3,14 @@ import { DatabaseService } from '../../database/database.service';
 
 export interface Customer {
   id: number;
-  customer_id: string;
-  first_name: string;
-  last_name: string;
+  customerId: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phone_number?: string;
-  date_of_birth?: Date;
-  created_at: Date;
-  updated_at: Date;
+  phoneNumber?: string;
+  dateOfBirth?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const TABLE = 'customer';
@@ -38,7 +38,7 @@ export class CustomerService {
 
   async findByCustomerId(customerId: string): Promise<Customer | null> {
     const customers = await this.databaseService.query(
-      `SELECT * FROM ${TABLE} WHERE customer_id = $1`,
+      `SELECT * FROM ${TABLE} WHERE "customerId" = $1`,
       [customerId],
     );
 
@@ -55,27 +55,27 @@ export class CustomerService {
   }
 
   async create(createCustomerDto: {
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    phone_number?: string;
-    date_of_birth?: Date;
+    phoneNumber?: string;
+    dateOfBirth?: Date;
   }): Promise<Customer> {
     const newCustomerUlid = this.generateUlid();
 
     const insertCustomerQuery = `
       INSERT INTO ${TABLE} (
-        customer_id, first_name, last_name, email, phone_number, date_of_birth
+        "customerId", "firstName", "lastName", email, "phoneNumber", "dateOfBirth"
       ) VALUES ($1, $2, $3, $4, $5, $6)
     `;
 
     await this.databaseService.query(insertCustomerQuery, [
       newCustomerUlid,
-      createCustomerDto.first_name,
-      createCustomerDto.last_name,
+      createCustomerDto.firstName,
+      createCustomerDto.lastName,
       createCustomerDto.email,
-      createCustomerDto.phone_number || null,
-      createCustomerDto.date_of_birth || null,
+      createCustomerDto.phoneNumber || null,
+      createCustomerDto.dateOfBirth || null,
     ]);
 
     return this.findByCustomerId(newCustomerUlid);
@@ -84,11 +84,11 @@ export class CustomerService {
   async update(
     id: number,
     updateCustomerDto: {
-      first_name?: string;
-      last_name?: string;
+      firstName?: string;
+      lastName?: string;
       email?: string;
-      phone_number?: string;
-      date_of_birth?: Date;
+      phoneNumber?: string;
+      dateOfBirth?: Date;
     },
   ): Promise<Customer> {
     const customer = await this.findOne(id);
@@ -97,14 +97,14 @@ export class CustomerService {
     const values = [];
     let paramCount = 1;
 
-    if (updateCustomerDto.first_name) {
-      updates.push(`first_name = $${paramCount++}`);
-      values.push(updateCustomerDto.first_name);
+    if (updateCustomerDto.firstName) {
+      updates.push(`"firstName" = $${paramCount++}`);
+      values.push(updateCustomerDto.firstName);
     }
 
-    if (updateCustomerDto.last_name) {
-      updates.push(`last_name = $${paramCount++}`);
-      values.push(updateCustomerDto.last_name);
+    if (updateCustomerDto.lastName) {
+      updates.push(`"lastName" = $${paramCount++}`);
+      values.push(updateCustomerDto.lastName);
     }
 
     if (updateCustomerDto.email) {
@@ -112,21 +112,21 @@ export class CustomerService {
       values.push(updateCustomerDto.email);
     }
 
-    if (updateCustomerDto.phone_number !== undefined) {
-      updates.push(`phone_number = $${paramCount++}`);
-      values.push(updateCustomerDto.phone_number);
+    if (updateCustomerDto.phoneNumber !== undefined) {
+      updates.push(`"phoneNumber" = $${paramCount++}`);
+      values.push(updateCustomerDto.phoneNumber);
     }
 
-    if (updateCustomerDto.date_of_birth !== undefined) {
-      updates.push(`date_of_birth = $${paramCount++}`);
-      values.push(updateCustomerDto.date_of_birth);
+    if (updateCustomerDto.dateOfBirth !== undefined) {
+      updates.push(`"dateOfBirth" = $${paramCount++}`);
+      values.push(updateCustomerDto.dateOfBirth);
     }
 
     if (updates.length === 0) {
       return customer;
     }
 
-    updates.push(`updated_at = CURRENT_TIMESTAMP`);
+    updates.push(`"updatedAt" = CURRENT_TIMESTAMP`);
     values.push(id);
 
     await this.databaseService.query(

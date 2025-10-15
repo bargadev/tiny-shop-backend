@@ -9,7 +9,7 @@ export class AddressService {
 
   async findAll(): Promise<Address[]> {
     return this.databaseService.query(
-      `SELECT * FROM ${TABLE} ORDER BY created_at DESC`,
+      `SELECT * FROM ${TABLE} ORDER BY "createdAt" DESC`,
     );
   }
 
@@ -28,7 +28,7 @@ export class AddressService {
 
   async findByCustomerId(customerId: string): Promise<Address[]> {
     const customers = await this.databaseService.query(
-      `SELECT customer_id FROM ${TABLE} WHERE customer_id = $1`,
+      `SELECT "customerId" FROM customer WHERE "customerId" = $1`,
       [customerId],
     );
 
@@ -37,14 +37,14 @@ export class AddressService {
     }
 
     return this.databaseService.query(
-      `SELECT * FROM ${TABLE} WHERE customer_id = $1 ORDER BY is_primary DESC, created_at ASC`,
+      `SELECT * FROM ${TABLE} WHERE "customerId" = $1 ORDER BY "isPrimary" DESC, "createdAt" ASC`,
       [customerId],
     );
   }
 
   async findPrimaryByCustomerId(customerId: string): Promise<Address | null> {
     const customers = await this.databaseService.query(
-      `SELECT customer_id FROM ${TABLE} WHERE customer_id = $1`,
+      `SELECT "customerId" FROM customer WHERE "customerId" = $1`,
       [customerId],
     );
 
@@ -53,7 +53,7 @@ export class AddressService {
     }
 
     const addresses = await this.databaseService.query(
-      `SELECT * FROM ${TABLE} WHERE customer_id = $1 AND is_primary = TRUE`,
+      `SELECT * FROM ${TABLE} WHERE "customerId" = $1 AND "isPrimary" = TRUE`,
       [customerId],
     );
 
@@ -62,7 +62,7 @@ export class AddressService {
 
   async create(createAddressDto: CreateAddressDto): Promise<Address> {
     const customers = await this.databaseService.query(
-      `SELECT customer_id FROM ${TABLE} WHERE customer_id = $1`,
+      `SELECT "customerId" FROM customer WHERE "customerId" = $1`,
       [createAddressDto.customerId],
     );
 
@@ -75,19 +75,22 @@ export class AddressService {
     // If this address is marked as primary, unset other primary addresses
     if (createAddressDto.isPrimary) {
       await this.databaseService.query(
-        `UPDATE ${TABLE} SET is_primary = FALSE WHERE customer_id = $1 AND is_primary = TRUE`,
+        `UPDATE ${TABLE} SET "isPrimary" = FALSE WHERE "customerId" = $1 AND "isPrimary" = TRUE`,
         [createAddressDto.customerId],
       );
     }
 
+    const newAddressUlid = this.generateUlid();
+
     const insertAddressQuery = `
       INSERT INTO ${TABLE} (
-        customer_id, street, number, complement, neighborhood, city, state, postal_code, country, is_primary
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        "addressId", "customerId", street, number, complement, neighborhood, city, state, "postalCode", country, "isPrimary"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING *
     `;
 
     const result = await this.databaseService.query(insertAddressQuery, [
+      newAddressUlid,
       createAddressDto.customerId,
       createAddressDto.street,
       createAddressDto.number,
@@ -111,8 +114,8 @@ export class AddressService {
 
     if (updateAddressDto.isPrimary === true) {
       await this.databaseService.query(
-        `UPDATE ${TABLE} SET is_primary = FALSE WHERE customer_id = $1 AND is_primary = TRUE`,
-        [address.id],
+        `UPDATE ${TABLE} SET "isPrimary" = FALSE WHERE "customerId" = $1 AND "isPrimary" = TRUE`,
+        [address.customerId],
       );
     }
 
@@ -151,7 +154,7 @@ export class AddressService {
     }
 
     if (updateAddressDto.postalCode) {
-      updates.push(`postal_code = $${paramCount++}`);
+      updates.push(`"postalCode" = $${paramCount++}`);
       values.push(updateAddressDto.postalCode);
     }
 
@@ -161,7 +164,7 @@ export class AddressService {
     }
 
     if (updateAddressDto.isPrimary !== undefined) {
-      updates.push(`is_primary = $${paramCount++}`);
+      updates.push(`"isPrimary" = $${paramCount++}`);
       values.push(updateAddressDto.isPrimary);
     }
 
@@ -169,7 +172,7 @@ export class AddressService {
       return address;
     }
 
-    updates.push(`updated_at = CURRENT_TIMESTAMP`);
+    updates.push(`"updatedAt" = CURRENT_TIMESTAMP`);
     values.push(id);
 
     await this.databaseService.query(
@@ -192,15 +195,20 @@ export class AddressService {
     const address = await this.findOne(id);
 
     await this.databaseService.query(
-      `UPDATE ${TABLE} SET is_primary = FALSE WHERE customer_id = $1 AND is_primary = TRUE`,
-      [address.customer_id],
+      `UPDATE ${TABLE} SET "isPrimary" = FALSE WHERE "customerId" = $1 AND "isPrimary" = TRUE`,
+      [address.customerId],
     );
 
     await this.databaseService.query(
-      `UPDATE ${TABLE} SET is_primary = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1`,
+      `UPDATE ${TABLE} SET "isPrimary" = TRUE, "updatedAt" = CURRENT_TIMESTAMP WHERE id = $1`,
       [id],
     );
 
     return this.findOne(id);
+  }
+
+  private generateUlid(): string {
+    // Implementação simples de ULID - em produção use uma biblioteca como 'ulid'
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 }

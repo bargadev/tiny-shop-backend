@@ -1,13 +1,24 @@
-import { IsNumber, IsPositive, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsPositive, Min } from 'class-validator';
 import { IsUlid } from '../../validators';
 
 export class CreateShoppingCartDto {
-  customer_id?: string;
+  @IsOptional()
+  @IsUlid()
+  customerId?: string;
+}
+
+export class CheckoutCartDto {
+  @IsUlid()
+  addressId: string;
+
+  @IsNumber()
+  @IsOptional()
+  paymentMethodId?: number;
 }
 
 export class AddItemToCartDto {
   @IsUlid()
-  item_id: string;
+  itemId: string;
 
   @IsNumber()
   @IsPositive()
@@ -28,24 +39,24 @@ export class UpdateItemQuantityDto {
 
 export interface CartItemWithDetails {
   id: number;
-  cart_id: string;
-  item_id: string;
+  cartId: string;
+  itemId: string;
   quantity: number;
   price: number;
-  added_at: Date;
-  item_name: string;
-  item_description: string;
-  item_sku: string;
-  item_category: string;
+  addedAt: Date;
+  itemName: string;
+  itemDescription: string;
+  itemSku: string;
+  itemCategory: string;
   subtotal: number;
 }
 
 export interface CartWithItemsAndTotal {
-  cart_id: string;
-  customer_id?: string;
-  created_at: Date;
-  updated_at: Date;
+  cartId: string;
+  customerId?: string;
+  createdAt: Date;
+  updatedAt: Date;
   items: CartItemWithDetails[];
-  total_amount: number;
-  total_items: number;
+  totalAmount: number;
+  totalItems: number;
 }

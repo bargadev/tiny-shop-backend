@@ -35,7 +35,7 @@ export class ItemController {
       description?: string;
       sku: string;
       price: number;
-      quantity_available?: number;
+      quantityAvailable?: number;
       category: string;
     },
   ): Promise<Item> {
@@ -51,7 +51,7 @@ export class ItemController {
       description?: string;
       sku?: string;
       price?: number;
-      quantity_available?: number;
+      quantityAvailable?: number;
       category?: string;
     },
   ): Promise<Item> {

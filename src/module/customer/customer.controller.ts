@@ -27,11 +27,11 @@ export class CustomerController {
   async create(
     @Body()
     createCustomerDto: {
-      first_name: string;
-      last_name: string;
+      firstName: string;
+      lastName: string;
       email: string;
-      phone_number?: string;
-      date_of_birth?: Date;
+      phoneNumber?: string;
+      dateOfBirth?: Date;
     },
   ): Promise<Customer> {
     return this.customerService.create(createCustomerDto);
@@ -42,11 +42,11 @@ export class CustomerController {
     @Param('id') id: string,
     @Body()
     updateCustomerDto: {
-      first_name?: string;
-      last_name?: string;
+      firstName?: string;
+      lastName?: string;
       email?: string;
-      phone_number?: string;
-      date_of_birth?: Date;
+      phoneNumber?: string;
+      dateOfBirth?: Date;
     },
   ): Promise<Customer> {
     return this.customerService.update(+id, updateCustomerDto);
