@@ -1,8 +1,19 @@
-import { IsNumber, IsPositive, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsPositive, Min } from 'class-validator';
 import { IsUlid } from '../../validators';
 
 export class CreateShoppingCartDto {
+  @IsOptional()
+  @IsUlid()
   customerId?: string;
+}
+
+export class CheckoutCartDto {
+  @IsUlid()
+  addressId: string;
+
+  @IsNumber()
+  @IsOptional()
+  paymentMethodId?: number;
 }
 
 export class AddItemToCartDto {

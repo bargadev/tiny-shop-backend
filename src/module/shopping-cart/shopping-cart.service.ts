@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ulid } from 'ulid';
 import { DatabaseService } from '../../database/database.service';
+import { Order } from '../order/order.model';
 import {
   CartItemWithDetails,
   CartWithItemsAndTotal,
+  CheckoutCartDto,
 } from './shopping-cart.dto';
 import { ShoppingCart, ShoppingCartItem } from './shopping-cart.model';
 
@@ -165,5 +167,101 @@ export class ShoppingCartService {
       totalAmount: parseFloat(totalAmount.toFixed(2)),
       totalItems: totalItems,
     };
+  }
+
+  async checkout(cartId: string, checkoutDto: CheckoutCartDto): Promise<Order> {
+    // Validate cart exists
+    const cart = await this.findByCartId(cartId);
+    if (!cart) {
+      throw new BadRequestException(`Cart with ID ${cartId} not found`);
+    }
+
+    // Validate cart has a customer
+    if (!cart.customerId) {
+      throw new BadRequestException(
+        'Cart must be associated with a customer to checkout',
+      );
+    }
+
+    // Get cart items
+    const cartItems = await this.databaseService.query(
+      'SELECT * FROM shopping_cart_item WHERE "cartId" = $1',
+      [cartId],
+    );
+
+    if (cartItems.length === 0) {
+      throw new BadRequestException('Cannot checkout an empty cart');
+    }
+
+    // Validate address belongs to customer
+    const address = await this.databaseService.query(
+      'SELECT * FROM address WHERE "addressId" = $1 AND "customerId" = $2',
+      [checkoutDto.addressId, cart.customerId],
+    );
+
+    if (address.length === 0) {
+      throw new BadRequestException(
+        'Address not found or does not belong to the customer',
+      );
+    }
+
+    // Validate payment method if provided
+    if (checkoutDto.paymentMethodId) {
+      const paymentMethod = await this.databaseService.query(
+        'SELECT * FROM payment_method WHERE id = $1 AND "isActive" = true',
+        [checkoutDto.paymentMethodId],
+      );
+
+      if (paymentMethod.length === 0) {
+        throw new BadRequestException(
+          'Payment method not found or is not active',
+        );
+      }
+    }
+
+    // Check if order already exists for this cart
+    const existingOrder = await this.databaseService.query(
+      'SELECT * FROM "order" WHERE "cartId" = $1',
+      [cartId],
+    );
+
+    if (existingOrder.length > 0) {
+      throw new BadRequestException(
+        `Order already exists for this cart: ${existingOrder[0].orderId}`,
+      );
+    }
+
+    // Calculate total amount
+    const totalAmount = cartItems.reduce(
+      (sum, item) => sum + item.quantity * parseFloat(item.price),
+      0,
+    );
+
+    // Create the order
+    const newOrderUlid = ulid();
+    const insertOrderQuery = `
+      INSERT INTO "order" (
+        "orderId", "cartId", "customerId", "addressId", 
+        "totalAmount", "paymentMethodId", status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `;
+
+    await this.databaseService.query(insertOrderQuery, [
+      newOrderUlid,
+      cartId,
+      cart.customerId,
+      checkoutDto.addressId,
+      totalAmount.toFixed(2),
+      checkoutDto.paymentMethodId || null,
+      'pending',
+    ]);
+
+    // Get and return the created order
+    const orders = await this.databaseService.query(
+      'SELECT * FROM "order" WHERE "orderId" = $1',
+      [newOrderUlid],
+    );
+
+    return orders[0];
   }
 }

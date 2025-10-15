@@ -7,9 +7,11 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { Order } from '../order/order.model';
 import {
   AddItemToCartDto,
   CartWithItemsAndTotal,
+  CheckoutCartDto,
   CreateShoppingCartDto,
   UpdateItemQuantityDto,
 } from './shopping-cart.dto';
@@ -34,7 +36,7 @@ export class ShoppingCartController {
   ): Promise<ShoppingCartItem> {
     return this.shoppingCartService.addItemToCart(
       cartId,
-      addItemToCartDto.item_id,
+      addItemToCartDto.itemId,
       addItemToCartDto.quantity,
       addItemToCartDto.price,
     );
@@ -66,5 +68,13 @@ export class ShoppingCartController {
     @Param('cartId') cartId: string,
   ): Promise<CartWithItemsAndTotal | null> {
     return this.shoppingCartService.getCartWithItemsAndTotal(cartId);
+  }
+
+  @Post(':cartId/checkout')
+  async checkout(
+    @Param('cartId') cartId: string,
+    @Body() checkoutCartDto: CheckoutCartDto,
+  ): Promise<Order> {
+    return this.shoppingCartService.checkout(cartId, checkoutCartDto);
   }
 }
